@@ -4,6 +4,7 @@ import SplashPage from "@/components/ui/splash-page";
 import { VideoPage } from "@/app/video/page";
 import Sidebar from "@/components/ui/sidebar";
 import { Box, Text } from "@chakra-ui/react";
+import Header from "@/components/ui/header";
 
 export default function HomePage() {
     const [showSplash, setShowSplash] = useState(true);
@@ -57,14 +58,22 @@ export default function HomePage() {
         <Box display="flex">
             {/* Sidebar */}
             <Sidebar onMenuItemClick={handleMenuItemClick} />
+            {/* Header */}
+            <Header />
             {/* Main content */}
-            <Box ml="72px" w="calc(100% - 72px)" h="100vh" position="absolute" top={0}>
+            <Box
+                ml="72px"
+                mt="80px"
+                w="calc(100% - 72px)"
+                h="calc(100% - 80px)"
+                position="absolute"
+                bg="white"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+            >
                 {renderContent()}
             </Box>
         </Box>
     );
-}
-
-function MainContent() {
-    return <div>This is my Home page</div>;
 }

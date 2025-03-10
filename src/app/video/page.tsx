@@ -31,7 +31,7 @@ export const VideoPage = () => {
     };
 
     return (
-        <Box w="100%" h="100%" overflow="hidden" bg="black" position="relative">
+        <Box w="97%" h="95%" overflow="hidden" bg="white" position="relative" borderRadius={18}>
             <video
                 ref={videoRef}
                 src="/video/intro.mp4"
