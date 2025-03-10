@@ -31,7 +31,7 @@ export const VideoPage = () => {
     };
 
     return (
-        <Box w="100vw" h="100vh" overflow="hidden" bg="black" position="relative">
+        <Box w="97%" h="95%" overflow="hidden" bg="white" position="relative" borderRadius={18}>
             <video
                 ref={videoRef}
                 src="/video/intro.mp4"
@@ -47,18 +47,17 @@ export const VideoPage = () => {
                     top="50%"
                     left="50%"
                     transform="translate(-50%, -50%)"
-                    colorScheme="teal"
                     borderRadius="full"
                     px={6}
                     py={4}
                     display="flex"
                     alignItems="center"
                     gap={2} // Adds some space between icon and text
-                    _hover={{ bg: "teal.600" }} // Change color on hover
+                    _hover={{ bg: "gray.700" }} // Change color on hover
                     boxShadow="lg"
+                    bg="gray.500"
                 >
-                    <Icon as={FaVolumeUp} w={6} h={6} />
-                    <Text fontSize="lg">Turn on volume</Text>
+                    <Icon as={FaVolumeUp} w={6} h={6} color="white" />
                 </Button>
             )}
         </Box>
