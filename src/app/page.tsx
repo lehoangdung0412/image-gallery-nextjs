@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import SplashPage from "@/components/ui/splash-page";
-import { VideoPage } from "@/app/video/page";
+import VideoPage from "@/components/ui/video";
 import Sidebar from "@/components/ui/sidebar";
-import { Box, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Header from "@/components/ui/header";
+import { ImageGallery } from "@/components/ui/image-gallery";
 
 export default function HomePage() {
     const [showSplash, setShowSplash] = useState(true);
@@ -24,29 +25,29 @@ export default function HomePage() {
             case "home":
                 return <VideoPage />;
             case "maison-10012024-wedding":
-                return <Text>Wedding in Maison 10/01/2024</Text>;
+                return <ImageGallery category="maison-10012024-wedding" />;
             case "groom-07012024-wedding":
-                return <Text>Wedding 07/01/2024 (Groom's family)</Text>;
+                return <ImageGallery category="groom-07012024-wedding" />;
             case "bride-07012024-wedding":
-                return <Text>Wedding 07/01/2024 (Bride's family)</Text>;
+                return <ImageGallery category="bride-07012024-wedding" />;
             case "06012024-wedding":
-                return <Text>Wedding 06/01/2024</Text>;
+                return <ImageGallery category="06012024-wedding" />;
             case "engagement-ceremony-wedding":
-                return <Text>Engagement Ceremony</Text>;
+                return <ImageGallery category="engagement-ceremony-wedding" />;
             case "pre-wedding":
-                return <Text>Pre-Wedding</Text>;
+                return <ImageGallery category="pre-wedding" />;
             case "2025-traveling":
-                return <Text>Traveling in 2025</Text>;
+                return <ImageGallery category="2025-traveling" />;
             case "2024-traveling":
-                return <Text>Traveling in 2024</Text>;
+                return <ImageGallery category="2024-traveling" />;
             case "2023-traveling":
-                return <Text>Traveling in 2023</Text>;
+                return <ImageGallery category="2023-traveling" />;
             case "2022-traveling":
-                return <Text>Traveling in 2022</Text>;
+                return <ImageGallery category="2022-traveling" />;
             case "2021-traveling":
-                return <Text>Traveling in 2021</Text>;
+                return <ImageGallery category="2021-traveling" />;
             case "settings":
-                return <Text>This is Settings demo</Text>;
+                return <ImageGallery category="settings" />;
             default:
                 return <VideoPage />;
         }
@@ -64,6 +65,7 @@ export default function HomePage() {
             <Box
                 ml="72px"
                 mt="80px"
+                pb="15px"
                 w="calc(100% - 72px)"
                 h="calc(100% - 80px)"
                 position="absolute"

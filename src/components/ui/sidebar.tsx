@@ -16,6 +16,7 @@ import { useState } from "react";
 
 const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void }) => {
     const [activeItem, setActiveItem] = useState<string | null>("home");
+    const [activeSubItem, setActiveSubItem] = useState<string | null>(null);
 
     // Function to handle the click event and update the active menu item
     const handleMenuItemClick = (item: string) => {
@@ -25,6 +26,8 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
         const baseCategory = item.includes("-wedding") ? "wedding" : item.includes("-traveling") ? "traveling" : item;
         // Update active item for color change
         setActiveItem(baseCategory);
+        // Update sub menu for color change
+        setActiveSubItem(item);
     };
 
     return (
@@ -69,11 +72,7 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                     padding: "10px",
                                 }}
                             >
-                                {activeItem === "wedding" ? (
-                                    <RiHeartsFill color="red" fontWeight="20px" />
-                                ) : (
-                                    <RiHeartsLine />
-                                )}
+                                {activeItem === "wedding" ? <RiHeartsFill color="red" /> : <RiHeartsLine />}
                             </Button>
                         </MenuTrigger>
                         <MenuContent bg="white">
@@ -83,6 +82,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 color="black"
                                 _hover={{
                                     bg: "red.200",
+                                }}
+                                style={{
+                                    background: activeSubItem === "maison-10012024-wedding" ? "#fc8181" : undefined,
                                 }}
                             >
                                 Wedding in Maison 10/01/2024
@@ -94,6 +96,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 _hover={{
                                     bg: "red.200",
                                 }}
+                                style={{
+                                    background: activeSubItem === "groom-07012024-wedding" ? "#fc8181" : undefined,
+                                }}
                             >
                                 Wedding 07/01/2024 (Groom's family)
                             </MenuItem>
@@ -103,6 +108,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 color="black"
                                 _hover={{
                                     bg: "red.200",
+                                }}
+                                style={{
+                                    background: activeSubItem === "bride-07012024-wedding" ? "#fc8181" : undefined,
                                 }}
                             >
                                 Wedding 07/01/2024 (Bride's family)
@@ -114,6 +122,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 _hover={{
                                     bg: "red.200",
                                 }}
+                                style={{
+                                    background: activeSubItem === "06012024-wedding" ? "#fc8181" : undefined,
+                                }}
                             >
                                 Wedding 06/01/2024
                             </MenuItem>
@@ -124,6 +135,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 _hover={{
                                     bg: "red.200",
                                 }}
+                                style={{
+                                    background: activeSubItem === "engagement-ceremony-wedding" ? "#fc8181" : undefined,
+                                }}
                             >
                                 Engagement Ceremony
                             </MenuItem>
@@ -133,6 +147,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 color="black"
                                 _hover={{
                                     bg: "red.200",
+                                }}
+                                style={{
+                                    background: activeSubItem === "pre-wedding" ? "#fc8181" : undefined,
                                 }}
                             >
                                 Pre-Wedding
@@ -163,6 +180,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 _hover={{
                                     bg: "blue.200",
                                 }}
+                                style={{
+                                    background: activeSubItem === "2025-traveling" ? "#63b3ed" : undefined,
+                                }}
                             >
                                 Traveling in 2025
                             </MenuItem>
@@ -172,6 +192,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 color="black"
                                 _hover={{
                                     bg: "blue.200",
+                                }}
+                                style={{
+                                    background: activeSubItem === "2024-traveling" ? "#63b3ed" : undefined,
                                 }}
                             >
                                 Traveling in 2024
@@ -183,6 +206,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 _hover={{
                                     bg: "blue.200",
                                 }}
+                                style={{
+                                    background: activeSubItem === "2023-traveling" ? "#63b3ed" : undefined,
+                                }}
                             >
                                 Traveling in 2023
                             </MenuItem>
@@ -193,6 +219,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 _hover={{
                                     bg: "blue.200",
                                 }}
+                                style={{
+                                    background: activeSubItem === "2022-traveling" ? "#63b3ed" : undefined,
+                                }}
                             >
                                 Traveling in 2022
                             </MenuItem>
@@ -202,6 +231,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                                 color="black"
                                 _hover={{
                                     bg: "blue.200",
+                                }}
+                                style={{
+                                    background: activeSubItem === "2021-traveling" ? "#63b3ed" : undefined,
                                 }}
                             >
                                 Traveling in 2021
@@ -232,6 +264,9 @@ const Sidebar = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void 
                             color="black"
                             _hover={{
                                 bg: "gray.300",
+                            }}
+                            style={{
+                                background: activeSubItem === "settings" ? "#cbd5e0" : undefined,
                             }}
                         >
                             This is Settings demo
