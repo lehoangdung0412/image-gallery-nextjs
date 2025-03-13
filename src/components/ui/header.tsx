@@ -6,7 +6,7 @@ const Header = () => {
             as="header"
             position="fixed"
             top={0}
-            left="72px  " // Avoid overlap the sidebar
+            left="72px" // Avoid overlap the sidebar
             right={0}
             height="80px"
             bg="white"
@@ -17,12 +17,12 @@ const Header = () => {
             px={8}
             zIndex={1000}
         >
-            <Text fontSize="3xl" fontWeight="bold" letterSpacing="wider" mr="20px">
+            <Text fontSize="xl" fontWeight="bold" letterSpacing="wider" mr="20px">
                 Hue Yomi - Vincent
             </Text>
             <Avatar.Root>
                 <Avatar.Fallback name="Hue Yomi - Vincent" />
-                <Avatar.Image src="/image/avatar.jpg" />
+                <Avatar.Image src="/images/avatar.jpg" />
             </Avatar.Root>
         </Box>
     );

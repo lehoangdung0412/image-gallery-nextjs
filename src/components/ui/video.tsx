@@ -1,10 +1,11 @@
-import { Box, Button, Text, Icon } from "@chakra-ui/react";
+"use client";
+import { Box, Button, Icon } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { FaVolumeUp } from "react-icons/fa";
 
-export const VideoPage = () => {
+export default function VideoPage() {
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    const [muted, setMuted] = useState(true); // Start with muted
+    const [muted, _setMuted] = useState(true); // Start with muted
     const [buttonVisible, setButtonVisible] = useState(true); // Track button visibility
 
     const handleMuteClick = () => {
@@ -19,7 +20,9 @@ export const VideoPage = () => {
             const interval = setInterval(() => {
                 if (volume < 0.7) {
                     volume += 0.01; // Increase volume by 1% each interval
-                    videoRef.current!.volume = volume; // Use non-null assertion here
+                    if (videoRef.current) {
+                        videoRef.current.volume = volume;
+                    }
                 } else {
                     clearInterval(interval); // Stop increasing when 70% is reached
                 }
@@ -31,7 +34,7 @@ export const VideoPage = () => {
     };
 
     return (
-        <Box w="97%" h="95%" overflow="hidden" bg="white" position="relative" borderRadius={18}>
+        <Box w="100%" h="100%" overflow="hidden" bg="white" position="relative" borderRadius={18} mx="15px">
             <video
                 ref={videoRef}
                 src="/video/intro.mp4"
@@ -57,9 +60,9 @@ export const VideoPage = () => {
                     boxShadow="lg"
                     bg="gray.500"
                 >
-                    <Icon as={FaVolumeUp} w={6} h={6} color="white" />
+                    <Icon as={FaVolumeUp} w={5} h={5} color="white" />
                 </Button>
             )}
         </Box>
     );
-};
+}
