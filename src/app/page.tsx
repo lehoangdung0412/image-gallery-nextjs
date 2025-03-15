@@ -71,7 +71,6 @@ export default function HomePage() {
                 position="absolute"
                 bg="white"
                 display="flex"
-                overflow="auto"
                 justifyContent="center"
                 // alignItems="center"
             >
