@@ -72,7 +72,7 @@ export default function HomePage() {
                 bg="white"
                 display="flex"
                 justifyContent="center"
-                alignItems="center"
+                // alignItems="center"
             >
                 {renderContent()}
             </Box>

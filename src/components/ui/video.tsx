@@ -34,35 +34,40 @@ export default function VideoPage() {
     };
 
     return (
-        <Box w="100%" h="100%" overflow="hidden" bg="white" position="relative" borderRadius={18} mx="15px">
-            <video
-                ref={videoRef}
-                src="/video/intro.mp4"
-                autoPlay
-                muted={muted} // Start muted for autoPlay
-                controls
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-            {buttonVisible && (
-                <Button
-                    onClick={handleMuteClick}
-                    position="absolute"
-                    top="50%"
-                    left="50%"
-                    transform="translate(-50%, -50%)"
-                    borderRadius="full"
-                    px={6}
-                    py={4}
-                    display="flex"
-                    alignItems="center"
-                    gap={2} // Adds some space between icon and text
-                    _hover={{ bg: "gray.700" }} // Change color on hover
-                    boxShadow="lg"
-                    bg="gray.500"
-                >
-                    <Icon as={FaVolumeUp} w={5} h={5} color="white" />
-                </Button>
-            )}
+        <Box overflow="hidden" bg="white" position="relative" mx="15px" borderRadius="15px" aspectRatio="16/9">
+            <Box position="relative">
+                <video
+                    ref={videoRef}
+                    src="/video/intro.mp4"
+                    autoPlay
+                    muted={muted} // Start muted for autoPlay
+                    controls
+                    style={{
+                        borderRadius: "15px",
+                        display: "block",
+                    }}
+                />
+                {buttonVisible && (
+                    <Button
+                        onClick={handleMuteClick}
+                        position="absolute"
+                        top="50%"
+                        left="50%"
+                        transform="translate(-50%, -50%)"
+                        borderRadius="full"
+                        px={6}
+                        py={4}
+                        display="flex"
+                        alignItems="center"
+                        gap={2} // Adds some space between icon and text
+                        _hover={{ bg: "gray.700" }} // Change color on hover
+                        boxShadow="lg"
+                        bg="gray.500"
+                    >
+                        <Icon as={FaVolumeUp} w={5} h={5} color="white" />
+                    </Button>
+                )}
+            </Box>
         </Box>
     );
 }
