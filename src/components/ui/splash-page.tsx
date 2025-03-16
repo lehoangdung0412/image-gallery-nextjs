@@ -1,3 +1,4 @@
+"use client";
 import { Box, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -28,12 +29,11 @@ export default function SplashPage() {
                 <Text
                     fontSize="5xl"
                     fontWeight="bold"
-                    style={{
-                        background: "linear-gradient(45deg, #ff7c00, #9b00ff)", // Gradient effect for text
-                        backgroundClip: "text", // Apply gradient only to text
-                        color: "transparent", // Make text transparent to show the gradient
-                        textShadow: "0 0 10px rgba(255, 124, 0, 0.7), 0 0 20px rgba(155, 0, 255, 0.6)", // Glowing effect
-                    }}
+                    bg="linear-gradient(45deg, #ff7c00, #9b00ff)" // Gradient effect for text
+                    bgClip="text" // Apply gradient only to text
+                    color="transparent" // Make text transparent to show the gradient
+                    textShadow="0 0 10px rgba(255, 124, 0, 0.7), 0 0 20px rgba(155, 0, 255, 0.6)" // Glowing effect
+                    m="20px"
                 >
                     <Typewriter
                         words={["Hello, welcome to our channel!!!"]}

@@ -2,8 +2,15 @@
 import { Box, Button, Icon } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { FaVolumeUp } from "react-icons/fa";
+import { TimelineComponent } from "@/components/ui/timeline";
 
-export default function VideoPage() {
+export default function VideoPage({
+    isWideScreen,
+    onMenuItemClick,
+}: {
+    isWideScreen: boolean;
+    onMenuItemClick: (menu: string) => void;
+}) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [muted, _setMuted] = useState(true); // Start with muted
     const [buttonVisible, setButtonVisible] = useState(true); // Track button visibility
@@ -34,8 +41,8 @@ export default function VideoPage() {
     };
 
     return (
-        <Box overflow="hidden" bg="white" position="relative" mx="15px" borderRadius="15px" aspectRatio="16/9">
-            <Box position="relative">
+        <Box mx="15px" aspectRatio="16/9" maxWidth="100%">
+            <Box position="relative" mx="15px">
                 <video
                     ref={videoRef}
                     src="/video/intro.mp4"
@@ -68,6 +75,7 @@ export default function VideoPage() {
                     </Button>
                 )}
             </Box>
+            {!isWideScreen && <TimelineComponent onMenuItemClick={onMenuItemClick} />}
         </Box>
     );
 }
