@@ -75,7 +75,7 @@ export const ImageGallery = ({ category }: { category: string }) => {
                 hasMore={hasMore}
                 loader={<Loader />}
                 endMessage={
-                    <Text textAlign="center" pb="5px">
+                    <Text textAlign="center" pb="5px" color="black">
                         Thank you for your watching!!!
                     </Text>
                 }
