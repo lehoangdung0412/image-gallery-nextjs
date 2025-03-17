@@ -7,6 +7,21 @@ import { Box, Text } from "@chakra-ui/react";
 import Header from "@/components/ui/header";
 import { ImageGallery } from "@/components/ui/image-gallery";
 import HamburgerMenu from "@/components/ui/hamburger-menu";
+import {
+    bride,
+    departure,
+    engagement,
+    groom,
+    home,
+    maison,
+    preWedding,
+    settings,
+    traveling2021,
+    traveling2022,
+    traveling2023,
+    traveling2024,
+    traveling2025,
+} from "@/constants";
 
 export default function HomePage() {
     const [showSplash, setShowSplash] = useState(true);
@@ -14,7 +29,7 @@ export default function HomePage() {
     const [currentPage, setCurrentPage] = useState("");
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
-    const [activeItem, setActiveItem] = useState<string | null>("home");
+    const [activeItem, setActiveItem] = useState<string | null>(home);
     const [activeSubItem, setActiveSubItem] = useState<string | null>(null);
     const [isOpenHamburgerMenu, setIsOpenHamburgerMenu] = useState(false);
 
@@ -74,32 +89,32 @@ export default function HomePage() {
 
     const renderContent = (isWideScreen: boolean) => {
         switch (currentPage) {
-            case "home":
+            case home:
                 return <VideoPage isWideScreen={isWideScreen} onMenuItemClick={onMenuItemClick} />;
-            case "maison-10012024-wedding":
-                return <ImageGallery category="maison-10012024-wedding" />;
-            case "groom-07012024-wedding":
-                return <ImageGallery category="groom-07012024-wedding" />;
-            case "bride-07012024-wedding":
-                return <ImageGallery category="bride-07012024-wedding" />;
-            case "06012024-wedding":
-                return <ImageGallery category="06012024-wedding" />;
-            case "engagement-ceremony-wedding":
-                return <ImageGallery category="engagement-ceremony-wedding" />;
-            case "pre-wedding":
-                return <ImageGallery category="pre-wedding" />;
-            case "2025-traveling":
-                return <ImageGallery category="2025-traveling" />;
-            case "2024-traveling":
-                return <ImageGallery category="2024-traveling" />;
-            case "2023-traveling":
-                return <ImageGallery category="2023-traveling" />;
-            case "2022-traveling":
-                return <ImageGallery category="2022-traveling" />;
-            case "2021-traveling":
-                return <ImageGallery category="2021-traveling" />;
-            case "settings":
-                return <ImageGallery category="settings" />;
+            case maison:
+                return <ImageGallery category={maison} />;
+            case groom:
+                return <ImageGallery category={groom} />;
+            case bride:
+                return <ImageGallery category={bride} />;
+            case departure:
+                return <ImageGallery category={departure} />;
+            case engagement:
+                return <ImageGallery category={engagement} />;
+            case preWedding:
+                return <ImageGallery category={preWedding} />;
+            case traveling2025:
+                return <ImageGallery category={traveling2025} />;
+            case traveling2024:
+                return <ImageGallery category={traveling2024} />;
+            case traveling2023:
+                return <ImageGallery category={traveling2023} />;
+            case traveling2022:
+                return <ImageGallery category={traveling2022} />;
+            case traveling2021:
+                return <ImageGallery category={traveling2021} />;
+            case settings:
+                return <ImageGallery category={settings} />;
             default:
                 return <VideoPage isWideScreen={isWideScreen} onMenuItemClick={onMenuItemClick} />;
         }

@@ -2,6 +2,7 @@
 import { Box, Button } from "@chakra-ui/react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
+import { red200 } from "@/constants/colors";
 
 const HamburgerMenu = ({
     isVisible,
@@ -34,7 +35,7 @@ const HamburgerMenu = ({
                         outline: "none",
                     }}
                     _hover={{
-                        bg: "red.200",
+                        bg: red200,
                     }}
                     style={{
                         padding: "10px",
@@ -50,7 +51,7 @@ const HamburgerMenu = ({
                         outline: "none",
                     }}
                     _hover={{
-                        bg: "red.200",
+                        bg: red200,
                     }}
                     style={{
                         padding: "10px",

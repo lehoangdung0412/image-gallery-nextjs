@@ -1,25 +1,27 @@
 "use client";
 import { Text, Timeline } from "@chakra-ui/react";
 import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
+import { bride, departure, engagement, groom, maison, preWedding } from "@/constants";
+import { green900 } from "@/constants/colors";
 
 export const TimelineComponent = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void }) => {
     return (
         <Timeline.Root px="15px" mt="20px" color="black" alignItems="center">
             <Timeline.Item>
                 <Timeline.Connector>
-                    <Timeline.Separator borderColor="#1B5E20" />
-                    <Timeline.Indicator outline="2px solid #1B5E20" color="black" bg="white">
-                        <LuShip color="#1B5E20" />
+                    <Timeline.Separator borderColor={green900} />
+                    <Timeline.Indicator outline="2px solid" outlineColor={green900} color="black" bg="white">
+                        <LuShip color={green900} />
                     </Timeline.Indicator>
                 </Timeline.Connector>
                 <Timeline.Content>
                     <Timeline.Title
-                        onClick={() => onMenuItemClick("maison-10012024-wedding")}
+                        onClick={() => onMenuItemClick(maison)}
                         cursor="pointer"
                         fontWeight="bold"
-                        color="#1B5E20"
+                        color={green900}
                         textDecoration="underline"
-                        textDecorationColor="#1B5E20"
+                        textDecorationColor={green900}
                     >
                         Wedding at Maison De Charme
                     </Timeline.Title>
@@ -33,19 +35,19 @@ export const TimelineComponent = ({ onMenuItemClick }: { onMenuItemClick: (menu:
 
             <Timeline.Item>
                 <Timeline.Connector>
-                    <Timeline.Separator borderColor="#1B5E20" />
-                    <Timeline.Indicator outline="2px solid #1B5E20" color="black" bg="white">
-                        <LuCheck color="#1B5E20" />
+                    <Timeline.Separator borderColor={green900} />
+                    <Timeline.Indicator outline="2px solid" outlineColor={green900} color="black" bg="white">
+                        <LuCheck color={green900} />
                     </Timeline.Indicator>
                 </Timeline.Connector>
                 <Timeline.Content>
                     <Timeline.Title
-                        onClick={() => onMenuItemClick("groom-07012024-wedding")}
+                        onClick={() => onMenuItemClick(groom)}
                         cursor="pointer"
                         fontWeight="bold"
-                        color="#1B5E20"
+                        color={green900}
                         textDecoration="underline"
-                        textDecorationColor="#1B5E20"
+                        textDecorationColor={green900}
                     >
                         Wedding ceremony at the groom's house
                     </Timeline.Title>
@@ -59,19 +61,19 @@ export const TimelineComponent = ({ onMenuItemClick }: { onMenuItemClick: (menu:
 
             <Timeline.Item>
                 <Timeline.Connector>
-                    <Timeline.Separator borderColor="#1B5E20" />
-                    <Timeline.Indicator outline="2px solid #1B5E20" color="black" bg="white">
-                        <LuPackage color="#1B5E20" />
+                    <Timeline.Separator borderColor={green900} />
+                    <Timeline.Indicator outline="2px solid" outlineColor={green900} color="black" bg="white">
+                        <LuPackage color={green900} />
                     </Timeline.Indicator>
                 </Timeline.Connector>
                 <Timeline.Content>
                     <Timeline.Title
-                        onClick={() => onMenuItemClick("bride-07012024-wedding")}
+                        onClick={() => onMenuItemClick(bride)}
                         cursor="pointer"
                         fontWeight="bold"
-                        color="#1B5E20"
+                        color={green900}
                         textDecoration="underline"
-                        textDecorationColor="#1B5E20"
+                        textDecorationColor={green900}
                     >
                         Wedding ceremony at the bride's house
                     </Timeline.Title>
@@ -85,19 +87,19 @@ export const TimelineComponent = ({ onMenuItemClick }: { onMenuItemClick: (menu:
 
             <Timeline.Item>
                 <Timeline.Connector>
-                    <Timeline.Separator borderColor="#1B5E20" />
-                    <Timeline.Indicator outline="2px solid #1B5E20" color="black" bg="white">
-                        <LuPackage color="#1B5E20" />
+                    <Timeline.Separator borderColor={green900} />
+                    <Timeline.Indicator outline="2px solid" outlineColor={green900} color="black" bg="white">
+                        <LuPackage color={green900} />
                     </Timeline.Indicator>
                 </Timeline.Connector>
                 <Timeline.Content>
                     <Timeline.Title
-                        onClick={() => onMenuItemClick("06012024-wedding")}
+                        onClick={() => onMenuItemClick(departure)}
                         cursor="pointer"
                         fontWeight="bold"
-                        color="#1B5E20"
+                        color={green900}
                         textDecoration="underline"
-                        textDecorationColor="#1B5E20"
+                        textDecorationColor={green900}
                     >
                         Bride's departure ceremony
                     </Timeline.Title>
@@ -111,19 +113,19 @@ export const TimelineComponent = ({ onMenuItemClick }: { onMenuItemClick: (menu:
 
             <Timeline.Item>
                 <Timeline.Connector>
-                    <Timeline.Separator borderColor="#1B5E20" />
-                    <Timeline.Indicator outline="2px solid #1B5E20" color="black" bg="white">
-                        <LuPackage color="#1B5E20" />
+                    <Timeline.Separator borderColor={green900} />
+                    <Timeline.Indicator outline="2px solid" outlineColor={green900} color="black" bg="white">
+                        <LuPackage color={green900} />
                     </Timeline.Indicator>
                 </Timeline.Connector>
                 <Timeline.Content>
                     <Timeline.Title
-                        onClick={() => onMenuItemClick("engagement-ceremony-wedding")}
+                        onClick={() => onMenuItemClick(engagement)}
                         cursor="pointer"
                         fontWeight="bold"
-                        color="#1B5E20"
+                        color={green900}
                         textDecoration="underline"
-                        textDecorationColor="#1B5E20"
+                        textDecorationColor={green900}
                     >
                         Engagement ceremony wedding
                     </Timeline.Title>
@@ -137,19 +139,19 @@ export const TimelineComponent = ({ onMenuItemClick }: { onMenuItemClick: (menu:
 
             <Timeline.Item>
                 <Timeline.Connector>
-                    <Timeline.Separator borderColor="#1B5E20" />
-                    <Timeline.Indicator outline="2px solid #1B5E20" color="black" bg="white">
-                        <LuPackage color="#1B5E20" />
+                    <Timeline.Separator borderColor={green900} />
+                    <Timeline.Indicator outline="2px solid" outlineColor={green900} color="black" bg="white">
+                        <LuPackage color={green900} />
                     </Timeline.Indicator>
                 </Timeline.Connector>
                 <Timeline.Content>
                     <Timeline.Title
-                        onClick={() => onMenuItemClick("pre-wedding")}
+                        onClick={() => onMenuItemClick(preWedding)}
                         cursor="pointer"
                         fontWeight="bold"
-                        color="#1B5E20"
+                        color={green900}
                         textDecoration="underline"
-                        textDecorationColor="#1B5E20"
+                        textDecorationColor={green900}
                     >
                         Pre-wedding
                     </Timeline.Title>

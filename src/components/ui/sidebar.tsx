@@ -12,6 +12,33 @@ import {
     RiSettings5Fill,
     RiSettings5Line,
 } from "react-icons/ri";
+import {
+    bride,
+    departure,
+    engagement,
+    groom,
+    home,
+    maison,
+    preWedding,
+    settings,
+    traveling2021,
+    traveling2022,
+    traveling2023,
+    traveling2024,
+    traveling2025,
+} from "@/constants";
+import {
+    blue200,
+    blue300,
+    blue900,
+    bluegray300,
+    gray200,
+    gray300,
+    green200,
+    green900,
+    red200,
+    red300,
+} from "@/constants/colors";
 
 const Sidebar = ({
     onMenuItemClick,
@@ -31,7 +58,8 @@ const Sidebar = ({
             top={0}
             left={0}
             p={6}
-            borderRight="1px solid #e9e9e9"
+            borderRight="1px solid"
+            borderColor={gray200}
             zIndex={2}
         >
             <VStack align="center" justify="space-between" h="100%">
@@ -39,17 +67,17 @@ const Sidebar = ({
                     <MenuRoot open={false}>
                         <MenuTrigger asChild>
                             <Button
-                                onClick={() => onMenuItemClick("home")}
+                                onClick={() => onMenuItemClick(home)}
                                 _hover={{
-                                    bg: "green.200",
+                                    bg: green200,
                                 }}
                                 style={{
                                     padding: "10px",
                                     background: "white",
                                 }}
                             >
-                                {activeItem === "home" ? (
-                                    <RiHomeHeartFill color="#1B5E20" />
+                                {activeItem === home ? (
+                                    <RiHomeHeartFill color={green900} />
                                 ) : (
                                     <RiHomeHeartLine color="black" />
                                 )}
@@ -63,7 +91,7 @@ const Sidebar = ({
                                     outline: "none",
                                 }}
                                 _hover={{
-                                    bg: "red.200",
+                                    bg: red200,
                                 }}
                                 style={{
                                     padding: "10px",
@@ -79,79 +107,79 @@ const Sidebar = ({
                         </MenuTrigger>
                         <MenuContent bg="white">
                             <MenuItem
-                                value="maison-10012024-wedding"
-                                onClick={() => onMenuItemClick("maison-10012024-wedding")}
+                                value={maison}
+                                onClick={() => onMenuItemClick(maison)}
                                 color="black"
                                 _hover={{
-                                    bg: "red.200",
+                                    bg: red200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "maison-10012024-wedding" ? "#fc8181" : undefined,
+                                    background: activeSubItem === maison ? red300 : undefined,
                                 }}
                             >
                                 Wedding in Maison 10/01/2024
                             </MenuItem>
                             <MenuItem
-                                value="groom-07012024-wedding"
-                                onClick={() => onMenuItemClick("groom-07012024-wedding")}
+                                value={groom}
+                                onClick={() => onMenuItemClick(groom)}
                                 color="black"
                                 _hover={{
-                                    bg: "red.200",
+                                    bg: red200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "groom-07012024-wedding" ? "#fc8181" : undefined,
+                                    background: activeSubItem === groom ? red300 : undefined,
                                 }}
                             >
                                 Wedding 07/01/2024 (Groom's family)
                             </MenuItem>
                             <MenuItem
-                                value="bride-07012024-wedding"
-                                onClick={() => onMenuItemClick("bride-07012024-wedding")}
+                                value={bride}
+                                onClick={() => onMenuItemClick(bride)}
                                 color="black"
                                 _hover={{
-                                    bg: "red.200",
+                                    bg: red200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "bride-07012024-wedding" ? "#fc8181" : undefined,
+                                    background: activeSubItem === bride ? red300 : undefined,
                                 }}
                             >
                                 Wedding 07/01/2024 (Bride's family)
                             </MenuItem>
                             <MenuItem
-                                value="06012024-wedding"
-                                onClick={() => onMenuItemClick("06012024-wedding")}
+                                value={departure}
+                                onClick={() => onMenuItemClick(departure)}
                                 color="black"
                                 _hover={{
-                                    bg: "red.200",
+                                    bg: red200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "06012024-wedding" ? "#fc8181" : undefined,
+                                    background: activeSubItem === departure ? red300 : undefined,
                                 }}
                             >
                                 Wedding 06/01/2024
                             </MenuItem>
                             <MenuItem
-                                value="engagement-ceremony-wedding"
-                                onClick={() => onMenuItemClick("engagement-ceremony-wedding")}
+                                value={engagement}
+                                onClick={() => onMenuItemClick(engagement)}
                                 color="black"
                                 _hover={{
-                                    bg: "red.200",
+                                    bg: red200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "engagement-ceremony-wedding" ? "#fc8181" : undefined,
+                                    background: activeSubItem === engagement ? red300 : undefined,
                                 }}
                             >
                                 Engagement Ceremony
                             </MenuItem>
                             <MenuItem
-                                value="pre-wedding"
-                                onClick={() => onMenuItemClick("pre-wedding")}
+                                value={preWedding}
+                                onClick={() => onMenuItemClick(preWedding)}
                                 color="black"
                                 _hover={{
-                                    bg: "red.200",
+                                    bg: red200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "pre-wedding" ? "#fc8181" : undefined,
+                                    background: activeSubItem === preWedding ? red300 : undefined,
                                 }}
                             >
                                 Pre-Wedding
@@ -165,7 +193,7 @@ const Sidebar = ({
                                     outline: "none",
                                 }}
                                 _hover={{
-                                    bg: "blue.200",
+                                    bg: blue200,
                                 }}
                                 style={{
                                     padding: "10px",
@@ -173,7 +201,7 @@ const Sidebar = ({
                                 }}
                             >
                                 {activeItem === "traveling" ? (
-                                    <RiPlanetFill color="#1D4E89" />
+                                    <RiPlanetFill color={blue900} />
                                 ) : (
                                     <RiPlanetLine color="black" />
                                 )}
@@ -181,66 +209,66 @@ const Sidebar = ({
                         </MenuTrigger>
                         <MenuContent bg="white">
                             <MenuItem
-                                value="2025-traveling"
-                                onClick={() => onMenuItemClick("2025-traveling")}
+                                value={traveling2025}
+                                onClick={() => onMenuItemClick(traveling2025)}
                                 color="black"
                                 _hover={{
-                                    bg: "blue.200",
+                                    bg: blue200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "2025-traveling" ? "#63b3ed" : undefined,
+                                    background: activeSubItem === traveling2025 ? blue300 : undefined,
                                 }}
                             >
                                 Traveling in 2025
                             </MenuItem>
                             <MenuItem
-                                value="2024-traveling"
-                                onClick={() => onMenuItemClick("2024-traveling")}
+                                value={traveling2024}
+                                onClick={() => onMenuItemClick(traveling2024)}
                                 color="black"
                                 _hover={{
-                                    bg: "blue.200",
+                                    bg: blue200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "2024-traveling" ? "#63b3ed" : undefined,
+                                    background: activeSubItem === traveling2024 ? blue300 : undefined,
                                 }}
                             >
                                 Traveling in 2024
                             </MenuItem>
                             <MenuItem
-                                value="2023-traveling"
-                                onClick={() => onMenuItemClick("2023-traveling")}
+                                value={traveling2023}
+                                onClick={() => onMenuItemClick(traveling2023)}
                                 color="black"
                                 _hover={{
-                                    bg: "blue.200",
+                                    bg: blue200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "2023-traveling" ? "#63b3ed" : undefined,
+                                    background: activeSubItem === traveling2023 ? blue300 : undefined,
                                 }}
                             >
                                 Traveling in 2023
                             </MenuItem>
                             <MenuItem
-                                value="2022-traveling"
-                                onClick={() => onMenuItemClick("2022-traveling")}
+                                value={traveling2022}
+                                onClick={() => onMenuItemClick(traveling2022)}
                                 color="black"
                                 _hover={{
-                                    bg: "blue.200",
+                                    bg: blue200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "2022-traveling" ? "#63b3ed" : undefined,
+                                    background: activeSubItem === traveling2022 ? blue300 : undefined,
                                 }}
                             >
                                 Traveling in 2022
                             </MenuItem>
                             <MenuItem
-                                value="2021-traveling"
-                                onClick={() => onMenuItemClick("2021-traveling")}
+                                value={traveling2021}
+                                onClick={() => onMenuItemClick(traveling2021)}
                                 color="black"
                                 _hover={{
-                                    bg: "blue.200",
+                                    bg: blue200,
                                 }}
                                 style={{
-                                    background: activeSubItem === "2021-traveling" ? "#63b3ed" : undefined,
+                                    background: activeSubItem === traveling2021 ? blue300 : undefined,
                                 }}
                             >
                                 Traveling in 2021
@@ -255,14 +283,14 @@ const Sidebar = ({
                                 outline: "none",
                             }}
                             _hover={{
-                                bg: "gray.300",
+                                bg: gray300,
                             }}
                             style={{
                                 padding: "10px",
                                 background: "white",
                             }}
                         >
-                            {activeItem === "settings" ? (
+                            {activeItem === settings ? (
                                 <RiSettings5Fill color="black" />
                             ) : (
                                 <RiSettings5Line color="black" />
@@ -271,14 +299,14 @@ const Sidebar = ({
                     </MenuTrigger>
                     <MenuContent bg="white">
                         <MenuItem
-                            value="settings"
-                            onClick={() => onMenuItemClick("settings")}
+                            value={settings}
+                            onClick={() => onMenuItemClick(settings)}
                             color="black"
                             _hover={{
-                                bg: "gray.300",
+                                bg: gray300,
                             }}
                             style={{
-                                background: activeSubItem === "settings" ? "#cbd5e0" : undefined,
+                                background: activeSubItem === settings ? bluegray300 : undefined,
                             }}
                         >
                             This is Settings demo
