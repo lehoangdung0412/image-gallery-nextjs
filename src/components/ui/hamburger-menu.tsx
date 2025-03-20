@@ -16,7 +16,7 @@ const HamburgerMenu = ({
         onHamburgerMenuClick(!isOpenHamburgerMenu);
     };
 
-    const icon = isOpenHamburgerMenu ? <AiOutlineClose /> : <RxHamburgerMenu />;
+    const icon = isOpenHamburgerMenu ? <AiOutlineClose color="black" /> : <RxHamburgerMenu color="black" />;
     const buttonStyles = {
         _focus: { outline: "none" },
         padding: "10px",

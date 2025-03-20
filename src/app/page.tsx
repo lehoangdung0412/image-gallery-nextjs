@@ -127,6 +127,8 @@ export default function HomePage() {
             isOpenHamburgerMenu={pageState.isOpenHamburgerMenu}
             onHamburgerMenuClick={toggleHamburgerMenu}
             onMenuItemClick={handleMenuItemClick}
+            activeItem={pageState.activeItem}
+            activeSubItem={pageState.activeSubItem}
         >
             {renderContent()}
         </MobileLayout>
