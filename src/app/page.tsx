@@ -1,12 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SplashPage from "@/components/ui/splash-page";
 import VideoPage from "@/components/ui/video";
-import Sidebar from "@/components/ui/sidebar";
-import { Box, Text } from "@chakra-ui/react";
-import Header from "@/components/ui/header";
 import { ImageGallery } from "@/components/ui/image-gallery";
-import HamburgerMenu from "@/components/ui/hamburger-menu";
 import {
     bride,
     departure,
@@ -22,147 +18,117 @@ import {
     traveling2024,
     traveling2025,
 } from "@/constants";
+import { useWindowSize } from "@/hooks/useWindowSize";
+import { useScrollPosition } from "@/hooks/useScrollPosition";
+import { SCREEN_BREAKPOINT, SPLASH_DURATION } from "@/constants/layout";
+import { DesktopLayout } from "@/layout/DesktopLayout";
+import { MobileLayout } from "@/layout/MobileLayout";
+
+interface PageState {
+    showSplash: boolean;
+    isWideScreen: boolean;
+    currentPage: string;
+    isVisible: boolean;
+    activeItem: string | null;
+    activeSubItem: string | null;
+    isOpenHamburgerMenu: boolean;
+}
 
 export default function HomePage() {
-    const [showSplash, setShowSplash] = useState(true);
-    const [isWideScreen, setIsWideScreen] = useState(true);
-    const [currentPage, setCurrentPage] = useState("");
-    const [isVisible, setIsVisible] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
-    const [activeItem, setActiveItem] = useState<string | null>(home);
-    const [activeSubItem, setActiveSubItem] = useState<string | null>(null);
-    const [isOpenHamburgerMenu, setIsOpenHamburgerMenu] = useState(false);
+    const [pageState, setPageState] = useState<PageState>({
+        showSplash: true,
+        isWideScreen: true,
+        currentPage: "",
+        isVisible: true,
+        activeItem: home,
+        activeSubItem: null,
+        isOpenHamburgerMenu: false,
+    });
 
-    // Function to handle the click event and update the active menu item
-    const onMenuItemClick = (item: string) => {
-        handleMenuItemClick(item); // Call the passed function from the parent
-        // Update active item for color change
-        // Determine the base category for wedding or traveling
+    const width = useWindowSize();
+    const { isVisible, lastScrollY } = useScrollPosition(80);
+
+    const handleMenuItemClick = (item: string) => {
         const baseCategory = item.includes("-wedding") ? "wedding" : item.includes("-traveling") ? "traveling" : item;
-        // Update active item for color change
-        setActiveItem(baseCategory);
-        // Update sub menu for color change
-        setActiveSubItem(item);
+
+        setPageState((prev) => ({
+            ...prev,
+            currentPage: item,
+            activeItem: baseCategory,
+            activeSubItem: item,
+        }));
     };
 
-    const handleMenuItemClick = (menu: string) => {
-        setCurrentPage(menu);
+    const toggleHamburgerMenu = () => {
+        setPageState((prev) => ({
+            ...prev,
+            isOpenHamburgerMenu: !prev.isOpenHamburgerMenu,
+        }));
     };
 
-    const handleHamburgerMenuClick = () => {
-        setIsOpenHamburgerMenu(!isOpenHamburgerMenu);
-    };
-
-    useEffect(() => {
-        setTimeout(() => setShowSplash(false), 3500);
-    }, []);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsWideScreen(window.innerWidth > 500);
+    const renderContent = useCallback(() => {
+        const props = {
+            isWideScreen: pageState.isWideScreen,
+            onMenuItemClick: handleMenuItemClick,
         };
-
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
-
-            if (currentScrollY > lastScrollY && currentScrollY > 80) {
-                setIsVisible(false);
-            } else {
-                setIsVisible(true);
-            }
-
-            setLastScrollY(currentScrollY);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, [lastScrollY]);
-
-    const renderContent = (isWideScreen: boolean) => {
-        switch (currentPage) {
-            case home:
-                return <VideoPage isWideScreen={isWideScreen} onMenuItemClick={onMenuItemClick} />;
-            case maison:
-                return <ImageGallery category={maison} />;
-            case groom:
-                return <ImageGallery category={groom} />;
-            case bride:
-                return <ImageGallery category={bride} />;
-            case departure:
-                return <ImageGallery category={departure} />;
-            case engagement:
-                return <ImageGallery category={engagement} />;
-            case preWedding:
-                return <ImageGallery category={preWedding} />;
-            case traveling2025:
-                return <ImageGallery category={traveling2025} />;
-            case traveling2024:
-                return <ImageGallery category={traveling2024} />;
-            case traveling2023:
-                return <ImageGallery category={traveling2023} />;
-            case traveling2022:
-                return <ImageGallery category={traveling2022} />;
-            case traveling2021:
-                return <ImageGallery category={traveling2021} />;
-            case settings:
-                return <ImageGallery category={settings} />;
-            default:
-                return <VideoPage isWideScreen={isWideScreen} onMenuItemClick={onMenuItemClick} />;
+        if (pageState.currentPage === home) {
+            return <VideoPage {...props} />;
         }
-    };
+        const pages = [
+            maison,
+            groom,
+            bride,
+            departure,
+            engagement,
+            preWedding,
+            traveling2025,
+            traveling2024,
+            traveling2023,
+            traveling2022,
+            traveling2021,
+            settings,
+        ];
+        const isPage = pages.includes(pageState.currentPage);
 
-    return showSplash ? (
-        <SplashPage />
-    ) : isWideScreen ? (
-        <Box display="flex">
-            <Sidebar onMenuItemClick={onMenuItemClick} activeItem={activeItem} activeSubItem={activeSubItem} />
-            <Header isVisible={true} isWideScreen={isWideScreen} />
-            <Box
-                ml="72px"
-                mt="80px"
-                w="calc(100% - 72px)"
-                h="calc(100% - 80px)"
-                position="absolute"
-                display="flex"
-                justifyContent="center"
-            >
-                {renderContent(isWideScreen)}
-            </Box>
-        </Box>
+        return isPage ? <ImageGallery category={pageState.currentPage} /> : <VideoPage {...props} />;
+    }, [pageState.currentPage, pageState.isWideScreen]);
+
+    // Update wide screen state based on window width
+    useEffect(() => {
+        setPageState((prev) => ({
+            ...prev,
+            isWideScreen: width > SCREEN_BREAKPOINT,
+        }));
+    }, [width]);
+
+    // Handle splash screen
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setPageState((prev) => ({ ...prev, showSplash: false }));
+        }, SPLASH_DURATION);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (pageState.showSplash) {
+        return <SplashPage />;
+    }
+
+    return pageState.isWideScreen ? (
+        <DesktopLayout
+            activeItem={pageState.activeItem}
+            activeSubItem={pageState.activeSubItem}
+            onMenuItemClick={handleMenuItemClick}
+        >
+            {renderContent()}
+        </DesktopLayout>
     ) : (
-        <Box display="flex">
-            {isOpenHamburgerMenu ? (
-                <Box mt="80px" w="100%" h="100%" position="fixed" display="flex" bg="white" zIndex={2}>
-                    <HamburgerMenu
-                        isVisible={true}
-                        onHamburgerMenuClick={handleHamburgerMenuClick}
-                        isOpenHamburgerMenu={isOpenHamburgerMenu}
-                    />
-                    <Header isVisible={true} isWideScreen={isWideScreen} />
-                    <Text>This is a text</Text>
-                </Box>
-            ) : (
-                <Box>
-                    <HamburgerMenu
-                        isVisible={isVisible}
-                        onHamburgerMenuClick={handleHamburgerMenuClick}
-                        isOpenHamburgerMenu={isOpenHamburgerMenu}
-                    />
-                    <Header isVisible={isVisible} isWideScreen={isWideScreen} />
-                </Box>
-            )}
-            <Box mt="80px" w="100%" h="calc(100% - 80px)" position="absolute" display="flex" justifyContent="center">
-                {renderContent(isWideScreen)}
-            </Box>
-        </Box>
+        <MobileLayout
+            isVisible={isVisible}
+            isOpenHamburgerMenu={pageState.isOpenHamburgerMenu}
+            onHamburgerMenuClick={toggleHamburgerMenu}
+            onMenuItemClick={handleMenuItemClick}
+        >
+            {renderContent()}
+        </MobileLayout>
     );
 }
