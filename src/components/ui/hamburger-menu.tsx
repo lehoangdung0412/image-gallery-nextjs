@@ -2,7 +2,6 @@
 import { Box, Button } from "@chakra-ui/react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
-import { red200 } from "@/constants/colors";
 
 const HamburgerMenu = ({
     isVisible,
@@ -10,9 +9,22 @@ const HamburgerMenu = ({
     isOpenHamburgerMenu,
 }: {
     isVisible: boolean;
-    onHamburgerMenuClick: (onHamburgerMenuClick: boolean) => void;
+    onHamburgerMenuClick: (open: boolean) => void;
     isOpenHamburgerMenu: boolean;
 }) => {
+    const handleClick = () => {
+        onHamburgerMenuClick(!isOpenHamburgerMenu);
+    };
+
+    const icon = isOpenHamburgerMenu ? <AiOutlineClose /> : <RxHamburgerMenu />;
+    const buttonStyles = {
+        _focus: { outline: "none" },
+        padding: "10px",
+        background: "white",
+        transition: "transform 0.3s ease-in-out", // Add smooth transition for transform
+        transform: isOpenHamburgerMenu ? "rotate(90deg)" : "rotate(0deg)", // Rotate icon on click
+    };
+
     return (
         <Box
             as="header"
@@ -29,39 +41,9 @@ const HamburgerMenu = ({
             transition="transform 0.1s ease-in-out"
             transform={isVisible ? "translateY(0)" : "translateY(-100%)"}
         >
-            {isOpenHamburgerMenu ? (
-                <Button
-                    _focus={{
-                        outline: "none",
-                    }}
-                    _hover={{
-                        bg: red200,
-                    }}
-                    style={{
-                        padding: "10px",
-                        background: "white",
-                    }}
-                    onClick={() => onHamburgerMenuClick(false)}
-                >
-                    <AiOutlineClose />
-                </Button>
-            ) : (
-                <Button
-                    _focus={{
-                        outline: "none",
-                    }}
-                    _hover={{
-                        bg: red200,
-                    }}
-                    style={{
-                        padding: "10px",
-                        background: "white",
-                    }}
-                    onClick={() => onHamburgerMenuClick(true)}
-                >
-                    <RxHamburgerMenu />
-                </Button>
-            )}
+            <Button onClick={handleClick} {...buttonStyles}>
+                {icon}
+            </Button>
         </Box>
     );
 };

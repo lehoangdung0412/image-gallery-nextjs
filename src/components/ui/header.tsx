@@ -2,6 +2,12 @@
 import { Avatar, Box, Text } from "@chakra-ui/react";
 
 const Header = ({ isVisible, isWideScreen }: { isVisible: boolean; isWideScreen: boolean }) => {
+    const headerText = isWideScreen ? "Hue Yomi - Vincent" : "Yomi - Vincent";
+    const fontSize = isWideScreen ? "xl" : "md";
+    const paddingX = isWideScreen ? 8 : 4;
+    const marginRight = isWideScreen ? "20px" : "10px";
+    const width = isWideScreen ? "100%" : "80%";
+
     return (
         <Box
             as="header"
@@ -9,26 +15,20 @@ const Header = ({ isVisible, isWideScreen }: { isVisible: boolean; isWideScreen:
             top={0}
             right={0}
             height="80px"
-            w={isWideScreen ? "100%" : "80%"}
+            width={width}
             bg="white"
             color="black"
             display="flex"
             justifyContent="flex-end"
             alignItems="center"
-            px={isWideScreen ? 8 : 4}
+            px={paddingX}
             zIndex={1}
             transition="transform 0.1s ease-in-out"
             transform={isVisible ? "translateY(0)" : "translateY(-100%)"}
         >
-            {isWideScreen ? (
-                <Text fontSize="xl" fontWeight="bold" letterSpacing="wide" mr="20px">
-                    Hue Yomi - Vincent
-                </Text>
-            ) : (
-                <Text fontSize="md" fontWeight="bold" letterSpacing="wide" mr="10px">
-                    Yomi - Vincent
-                </Text>
-            )}
+            <Text fontSize={fontSize} fontWeight="bold" letterSpacing="wide" mr={marginRight}>
+                {headerText}
+            </Text>
             <Avatar.Root>
                 <Avatar.Fallback name="Hue Yomi - Vincent" />
                 <Avatar.Image src="/images/avatar.jpg" />
