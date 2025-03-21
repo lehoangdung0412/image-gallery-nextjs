@@ -3,6 +3,7 @@ export const green200 = "#9ae6b4";
 export const blue200 = "#90cdf4";
 export const gray200 = "#e9e9e9";
 export const gray300 = "#e2e8f0";
+export const green300 = "#48bb78";
 export const green900 = "#1B5E20";
 export const red300 = "#fc8181";
 export const blue300 = "#63b3ed";
