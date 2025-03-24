@@ -9,6 +9,7 @@ import {
     engagement,
     groom,
     home,
+    imagesTab,
     maison,
     preWedding,
     settings,
@@ -28,6 +29,7 @@ interface PageState {
     showSplash: boolean;
     isWideScreen: boolean;
     currentPage: string;
+    currentTab: string;
     isVisible: boolean;
     activeItem: string | null;
     activeSubItem: string | null;
@@ -39,6 +41,7 @@ export default function HomePage() {
         showSplash: true,
         isWideScreen: true,
         currentPage: "",
+        currentTab: imagesTab,
         isVisible: true,
         activeItem: home,
         activeSubItem: null,
@@ -56,6 +59,13 @@ export default function HomePage() {
             currentPage: item,
             activeItem: baseCategory,
             activeSubItem: item,
+        }));
+    };
+
+    const handleCurrentTab = (tab: string) => {
+        setPageState((prev) => ({
+            ...prev,
+            currentTab: tab,
         }));
     };
 
@@ -90,8 +100,16 @@ export default function HomePage() {
         ];
         const isPage = pages.includes(pageState.currentPage);
 
-        return isPage ? <ImageGallery category={pageState.currentPage} /> : <VideoPage {...props} />;
-    }, [pageState.currentPage, pageState.isWideScreen]);
+        return isPage ? (
+            <ImageGallery
+                category={pageState.currentPage}
+                currentTab={pageState.currentTab}
+                isWideScreen={pageState.isWideScreen}
+            />
+        ) : (
+            <VideoPage {...props} />
+        );
+    }, [pageState.currentPage, pageState.isWideScreen, pageState.currentTab]);
 
     // Update wide screen state based on window width
     useEffect(() => {
@@ -118,6 +136,8 @@ export default function HomePage() {
             activeItem={pageState.activeItem}
             activeSubItem={pageState.activeSubItem}
             onMenuItemClick={handleMenuItemClick}
+            currentTab={pageState.currentTab}
+            onCurrentTab={handleCurrentTab}
         >
             {renderContent()}
         </DesktopLayout>
@@ -129,6 +149,8 @@ export default function HomePage() {
             onMenuItemClick={handleMenuItemClick}
             activeItem={pageState.activeItem}
             activeSubItem={pageState.activeSubItem}
+            currentTab={pageState.currentTab}
+            onCurrentTab={handleCurrentTab}
         >
             {renderContent()}
         </MobileLayout>

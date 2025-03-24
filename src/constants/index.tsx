@@ -11,3 +11,5 @@ export const traveling2023 = "2023-traveling";
 export const traveling2022 = "2022-traveling";
 export const traveling2021 = "2021-traveling";
 export const settings = "settings";
+export const imagesTab = "images";
+export const videosTab = "videos";

@@ -13,6 +13,8 @@ interface MobileLayoutProps {
     onMenuItemClick: (item: string) => void;
     activeItem: string | null;
     activeSubItem: string | null;
+    currentTab: string;
+    onCurrentTab: (item: string) => void;
 }
 
 export const MobileLayout = ({
@@ -23,6 +25,8 @@ export const MobileLayout = ({
     onMenuItemClick,
     activeItem,
     activeSubItem,
+    currentTab,
+    onCurrentTab,
 }: MobileLayoutProps) => {
     const handleMenuItemClick = (item: string) => {
         onMenuItemClick(item);
@@ -48,7 +52,13 @@ export const MobileLayout = ({
                         onHamburgerMenuClick={onHamburgerMenuClick}
                         isOpenHamburgerMenu={isOpenHamburgerMenu}
                     />
-                    <Header isVisible={true} isWideScreen={false} />
+                    <Header
+                        isVisible={true}
+                        isWideScreen={false}
+                        currentTab={currentTab}
+                        onCurrentTab={onCurrentTab}
+                        activeItem={activeItem}
+                    />
                     <MobileMenuList
                         activeItem={activeItem}
                         activeSubItem={activeSubItem}
@@ -62,7 +72,13 @@ export const MobileLayout = ({
                         onHamburgerMenuClick={onHamburgerMenuClick}
                         isOpenHamburgerMenu={isOpenHamburgerMenu}
                     />
-                    <Header isVisible={isVisible} isWideScreen={false} />
+                    <Header
+                        isVisible={isVisible}
+                        isWideScreen={false}
+                        currentTab={currentTab}
+                        onCurrentTab={onCurrentTab}
+                        activeItem={activeItem}
+                    />
                 </Box>
             )}
 
