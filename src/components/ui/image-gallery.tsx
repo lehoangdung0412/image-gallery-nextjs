@@ -1,5 +1,4 @@
-"use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Masonry from "react-masonry-css";
 import { Box, Text, Image, Center } from "@chakra-ui/react";
@@ -36,6 +35,10 @@ export const ImageGallery = ({
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(1);
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+    const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+    const [isHovering, setIsHovering] = useState(false);
 
     const fetchImages = useCallback(
         async (pageNum: number) => {
@@ -109,8 +112,59 @@ export const ImageGallery = ({
         setVideos([]);
         setPage(1);
         setHasMore(true);
-        // The fetch will be handled by the first useEffect when page/currentTab changes
     }, [category, currentTab]);
+
+    const getTopMostVideoIndex = useCallback(() => {
+        let closestIndex: number | null = null;
+        let minTop = Infinity;
+
+        videoRefs.current.forEach((video, index) => {
+            if (!video) return;
+            const rect = video.getBoundingClientRect();
+            if (rect.top >= 0 && rect.top < minTop) {
+                minTop = rect.top;
+                closestIndex = index;
+            }
+        });
+
+        return closestIndex;
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            requestAnimationFrame(() => {
+                const index = getTopMostVideoIndex();
+                if (index !== null) {
+                    setPlayingIndex(index);
+                }
+            });
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [getTopMostVideoIndex]);
+
+    useEffect(() => {
+        if (videos.length > 0 && playingIndex === null) {
+            setPlayingIndex(0);
+        }
+    }, [videos.length, playingIndex]);
+
+    useEffect(() => {
+        if (isHovering) return;
+
+        videoRefs.current.forEach((video, index) => {
+            if (!video) return;
+            if (index === hoveredIndex || index === playingIndex) {
+                // video.muted = true;
+                video.play().catch((err) => {
+                    console.error("Error playing video:", err);
+                });
+            } else {
+                video.pause();
+            }
+        });
+    }, [hoveredIndex, playingIndex, videos.length, isHovering]);
 
     return (
         <Box w="100%" h="100%" mx="15px">
@@ -121,7 +175,7 @@ export const ImageGallery = ({
                 loader={<Loader />}
                 endMessage={
                     <Text textAlign="center" pb="5px" color="black">
-                        Thank you for your watching!!!
+                        Thank you for watching!!!
                     </Text>
                 }
                 style={{ overflow: "unset" }}
@@ -146,8 +200,38 @@ export const ImageGallery = ({
                           ))
                         : currentTab === videosTab
                           ? videos.map((video, index) => (
-                                <Box key={`${video}-${index}`} borderRadius={18} overflow="hidden" mb="15px">
-                                    <video src={video} controls style={{ width: "100%", borderRadius: "10px" }} />
+                                <Box
+                                    key={index}
+                                    borderRadius={18}
+                                    overflow="hidden"
+                                    mb="15px"
+                                    onMouseEnter={() => {
+                                        setHoveredIndex(index);
+                                        setIsHovering(true);
+                                        if (playingIndex !== null && playingIndex !== index) {
+                                            videoRefs.current[playingIndex]?.pause();
+                                        }
+                                        videoRefs.current[index]?.play().catch(() => {});
+                                    }}
+                                    onMouseLeave={() => {
+                                        setHoveredIndex(null);
+                                        setIsHovering(false);
+                                        if (playingIndex !== null && playingIndex !== index) {
+                                            videoRefs.current[playingIndex]?.play().catch(() => {});
+                                        }
+                                        videoRefs.current[index]?.pause();
+                                    }}
+                                >
+                                    <video
+                                        ref={(el) => {
+                                            videoRefs.current[index] = el;
+                                        }}
+                                        src={video}
+                                        preload="auto"
+                                        // controls
+                                        loop
+                                        style={{ width: "100%", borderRadius: "10px" }}
+                                    />
                                 </Box>
                             ))
                           : undefined}
