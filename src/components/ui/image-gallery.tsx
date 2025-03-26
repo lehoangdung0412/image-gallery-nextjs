@@ -39,6 +39,7 @@ export const ImageGallery = ({
     const [playingIndex, setPlayingIndex] = useState<number | null>(null);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
     const [isHovering, setIsHovering] = useState(false);
+    const loadMore = () => setPage((prev) => prev + 1);
 
     const fetchImages = useCallback(
         async (pageNum: number) => {
@@ -95,9 +96,12 @@ export const ImageGallery = ({
         [category, currentTab],
     );
 
-    const loadMore = useCallback(() => {
-        setPage((prev) => prev + 1);
-    }, []);
+    useEffect(() => {
+        setImages([]);
+        setVideos([]);
+        setPage(1);
+        setHasMore(true);
+    }, [category, currentTab]);
 
     useEffect(() => {
         if (currentTab === imagesTab) {
@@ -106,13 +110,6 @@ export const ImageGallery = ({
             fetchVideos(page);
         }
     }, [page, currentTab, fetchImages, fetchVideos]);
-
-    useEffect(() => {
-        setImages([]);
-        setVideos([]);
-        setPage(1);
-        setHasMore(true);
-    }, [category, currentTab]);
 
     const getTopMostVideoIndex = useCallback(() => {
         let closestIndex: number | null = null;

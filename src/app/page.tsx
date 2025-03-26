@@ -127,6 +127,11 @@ export default function HomePage() {
         return () => clearTimeout(timer);
     }, []);
 
+    useEffect(() => {
+        // Reset scroll position trước khi render nội dung mới
+        window.scrollTo(0, 0);
+    }, [pageState.currentPage]);
+
     if (pageState.showSplash) {
         return <SplashPage />;
     }
