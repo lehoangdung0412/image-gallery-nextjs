@@ -8,13 +8,28 @@ interface DesktopLayoutProps {
     activeItem: string | null;
     activeSubItem: string | null;
     onMenuItemClick: (item: string) => void;
+    currentTab: string;
+    onCurrentTab: (item: string) => void;
 }
 
-export const DesktopLayout = ({ children, activeItem, activeSubItem, onMenuItemClick }: DesktopLayoutProps) => {
+export const DesktopLayout = ({
+    children,
+    activeItem,
+    activeSubItem,
+    onMenuItemClick,
+    currentTab,
+    onCurrentTab,
+}: DesktopLayoutProps) => {
     return (
         <Box display="flex">
             <Sidebar onMenuItemClick={onMenuItemClick} activeItem={activeItem} activeSubItem={activeSubItem} />
-            <Header isVisible={true} isWideScreen={true} />
+            <Header
+                isVisible={true}
+                isWideScreen={true}
+                currentTab={currentTab}
+                onCurrentTab={onCurrentTab}
+                activeItem={activeItem}
+            />
             <Box
                 ml="72px"
                 mt="80px"
