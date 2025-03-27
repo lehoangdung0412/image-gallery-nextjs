@@ -1,8 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Masonry from "react-masonry-css";
-import { Box, Text, Image, Center } from "@chakra-ui/react";
+import { Box, Text, Image, Center, Button, CloseButton, IconButton } from "@chakra-ui/react";
 import { imagesTab, videosTab } from "@/constants";
+import { useFetchImages } from "@/hooks/useFetchImages";
+import { useFetchVideos } from "@/hooks/useFetchVideos";
+import { useScrollHandler } from "@/hooks/useScrollHandler";
+import { useVideoControl } from "@/hooks/useVideoControl";
+import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import { red200 } from "@/constants/colors";
 
 // Loader Component (3 dots)
 const Loader = () => (
@@ -15,21 +21,126 @@ const Loader = () => (
     </Center>
 );
 
+interface OverlayProps {
+    media: string;
+    onClose: () => void;
+    onPrev: () => void;
+    onNext: () => void;
+    isWideScreen: boolean;
+}
+
+// Overlay Component
+const Overlay = ({ media, onClose, onPrev, onNext, isWideScreen }: OverlayProps) => {
+    if (!media) return null;
+
+    return (
+        <Box
+            position="fixed"
+            top={0}
+            left={0}
+            w="100%"
+            h="100%"
+            bg="rgba(0, 0, 0, 0.8)"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            zIndex={1000}
+        >
+            <Box
+                position="relative"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                width={isWideScreen ? "70%" : "95%"}
+                height={isWideScreen ? "88%" : "auto"}
+                bg="white"
+                borderRadius="18px"
+                overflow="hidden"
+                m={isWideScreen ? "10%" : "3%"}
+                p={isWideScreen ? "0" : "5%"}
+            >
+                <CloseButton
+                    position="absolute"
+                    top={isWideScreen ? 2 : 0}
+                    right={isWideScreen ? 2 : 0}
+                    size="lg"
+                    color="black"
+                    onClick={onClose}
+                    _hover={{
+                        background: red200,
+                    }}
+                />
+                <IconButton
+                    aria-label="Previous"
+                    position="absolute"
+                    left="0"
+                    top="50%"
+                    transform="translateY(-50%)"
+                    colorScheme="whiteAlpha"
+                    onClick={onPrev}
+                    bg="white"
+                    style={{
+                        transform: "scale(0.8)",
+                        transformOrigin: "center",
+                    }}
+                    _hover={{
+                        background: red200,
+                    }}
+                >
+                    <ArrowLeftIcon color="black" />
+                </IconButton>
+                {media.endsWith(".mp4") || media.endsWith(".webm") ? (
+                    <video
+                        src={media}
+                        controls
+                        autoPlay={true}
+                        style={{
+                            maxWidth: "90%",
+                            maxHeight: "90%",
+                            borderRadius: "18px",
+                        }}
+                    />
+                ) : (
+                    <Image src={media} maxWidth="90%" maxHeight="90%" borderRadius={18} />
+                )}
+                <IconButton
+                    aria-label="Next"
+                    position="absolute"
+                    right="0"
+                    top="50%"
+                    transform="translateY(-50%)"
+                    colorScheme="whiteAlpha"
+                    onClick={onNext}
+                    bg="white"
+                    style={{
+                        transform: "scale(0.8)",
+                        transformOrigin: "center",
+                    }}
+                    _hover={{
+                        background: red200,
+                    }}
+                >
+                    <ArrowRightIcon color="black" />
+                </IconButton>
+            </Box>
+        </Box>
+    );
+};
+
 const breakpointColumnsObj = {
-    default: 3,
+    default: 4,
+    1440: 3,
     1100: 2,
     700: 2,
 };
 
-export const ImageGallery = ({
-    category,
-    currentTab,
-    isWideScreen,
-}: {
+interface ImageGalleryProps {
     category: string;
     currentTab: string;
     isWideScreen: boolean;
-}) => {
+}
+
+export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGalleryProps) => {
     const [images, setImages] = useState<string[]>([]);
     const [videos, setVideos] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -39,77 +150,17 @@ export const ImageGallery = ({
     const [playingIndex, setPlayingIndex] = useState<number | null>(null);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
     const [isHovering, setIsHovering] = useState(false);
-    const loadMore = () => setPage((prev) => prev + 1);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const mediaList = currentTab === imagesTab ? images : videos;
 
-    const fetchImages = useCallback(
-        async (pageNum: number) => {
-            if (loading) return;
-            setLoading(true);
+    const handleOpen = (index: number) => setSelectedIndex(index);
+    const handleClose = () => setSelectedIndex(null);
+    const handlePrev = () => setSelectedIndex((prev) => (prev && prev > 0 ? prev - 1 : prev));
+    const handleNext = () =>
+        setSelectedIndex((prev) => (prev !== null && prev < mediaList.length - 1 ? prev + 1 : prev));
 
-            try {
-                if (currentTab !== imagesTab) return;
-
-                const response = await fetch("/images.json");
-                if (!response.ok) return;
-
-                const data = await response.json();
-                const allImages = data[category] || [];
-                const imagesPerPage = 20;
-                const paginatedImages = allImages.slice((pageNum - 1) * imagesPerPage, pageNum * imagesPerPage);
-
-                setImages((prev) => [...prev, ...paginatedImages]);
-                setHasMore(paginatedImages.length === imagesPerPage);
-            } catch (error) {
-                console.error("Error fetching images:", error);
-            } finally {
-                setLoading(false);
-            }
-        },
-        [category, currentTab],
-    );
-
-    const fetchVideos = useCallback(
-        async (pageNum: number) => {
-            if (loading) return;
-            setLoading(true);
-
-            try {
-                if (currentTab !== videosTab) return;
-
-                const response = await fetch("/videos.json");
-                if (!response.ok) return;
-
-                const data = await response.json();
-                const allVideos = data[category] || [];
-                const videosPerPage = 10;
-                const paginatedVideos = allVideos.slice((pageNum - 1) * videosPerPage, pageNum * videosPerPage);
-
-                setVideos((prev) => [...prev, ...paginatedVideos]);
-                // Set hasMore to false if we got fewer items than the page size
-                setHasMore(paginatedVideos.length === videosPerPage);
-            } catch (error) {
-                console.error("Error fetching videos:", error);
-            } finally {
-                setLoading(false);
-            }
-        },
-        [category, currentTab],
-    );
-
-    useEffect(() => {
-        setImages([]);
-        setVideos([]);
-        setPage(1);
-        setHasMore(true);
-    }, [category, currentTab]);
-
-    useEffect(() => {
-        if (currentTab === imagesTab) {
-            fetchImages(page);
-        } else if (currentTab === videosTab) {
-            fetchVideos(page);
-        }
-    }, [page, currentTab, fetchImages, fetchVideos]);
+    const { fetchImages } = useFetchImages(category, currentTab, loading, setLoading, setImages, setHasMore);
+    const { fetchVideos } = useFetchVideos(category, currentTab, loading, setLoading, setVideos, setHasMore);
 
     const getTopMostVideoIndex = useCallback(() => {
         let closestIndex: number | null = null;
@@ -127,19 +178,25 @@ export const ImageGallery = ({
         return closestIndex;
     }, []);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            requestAnimationFrame(() => {
-                const index = getTopMostVideoIndex();
-                if (index !== null) {
-                    setPlayingIndex(index);
-                }
-            });
-        };
+    useScrollHandler(getTopMostVideoIndex, setPlayingIndex);
+    useVideoControl(videos, hoveredIndex, playingIndex, isHovering, videoRefs);
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [getTopMostVideoIndex]);
+    const loadMore = () => setPage((prev) => prev + 1);
+
+    useEffect(() => {
+        setImages([]);
+        setVideos([]);
+        setPage(1);
+        setHasMore(true);
+    }, [category, currentTab]);
+
+    useEffect(() => {
+        if (currentTab === imagesTab) {
+            fetchImages(page);
+        } else if (currentTab === videosTab) {
+            fetchVideos(page);
+        }
+    }, [page, currentTab, fetchImages, fetchVideos]);
 
     useEffect(() => {
         if (videos.length > 0 && playingIndex === null) {
@@ -147,24 +204,17 @@ export const ImageGallery = ({
         }
     }, [videos.length, playingIndex]);
 
-    useEffect(() => {
-        if (isHovering) return;
-
-        videoRefs.current.forEach((video, index) => {
-            if (!video) return;
-            if (index === hoveredIndex || index === playingIndex) {
-                // video.muted = true;
-                video.play().catch((err) => {
-                    console.error("Error playing video:", err);
-                });
-            } else {
-                video.pause();
-            }
-        });
-    }, [hoveredIndex, playingIndex, videos.length, isHovering]);
-
     return (
-        <Box w="100%" h="100%" mx="15px">
+        <Box w="100%" h="100%">
+            {selectedIndex !== null && (
+                <Overlay
+                    media={mediaList[selectedIndex]}
+                    onClose={handleClose}
+                    onPrev={handlePrev}
+                    onNext={handleNext}
+                    isWideScreen={isWideScreen}
+                />
+            )}
             <InfiniteScroll
                 dataLength={currentTab === imagesTab ? images.length : videos.length}
                 next={loadMore}
@@ -175,8 +225,8 @@ export const ImageGallery = ({
                         Thank you for watching!!!
                     </Text>
                 }
-                style={{ overflow: "unset" }}
-                scrollThreshold={0.95}
+                style={{ overflow: "unset", marginLeft: "15px", marginRight: "15px" }}
+                scrollThreshold={0.8}
             >
                 <Masonry
                     breakpointCols={isWideScreen || currentTab === imagesTab ? breakpointColumnsObj : 1}
@@ -185,7 +235,13 @@ export const ImageGallery = ({
                 >
                     {currentTab === imagesTab
                         ? images.map((image, index) => (
-                              <Box key={`${image}-${index}`} borderRadius={18} overflow="hidden" mb="15px">
+                              <Box
+                                  key={`${image}-${index}`}
+                                  borderRadius={18}
+                                  overflow="hidden"
+                                  mb="15px"
+                                  onClick={() => handleOpen(index)}
+                              >
                                   <Image
                                       src={image}
                                       alt={`Image ${index}`}
@@ -202,6 +258,12 @@ export const ImageGallery = ({
                                     borderRadius={18}
                                     overflow="hidden"
                                     mb="15px"
+                                    onClick={() => {
+                                        setHoveredIndex(null);
+                                        setIsHovering(false);
+                                        videoRefs.current[index]?.pause();
+                                        setSelectedIndex(index);
+                                    }}
                                     onMouseEnter={() => {
                                         setHoveredIndex(index);
                                         setIsHovering(true);
