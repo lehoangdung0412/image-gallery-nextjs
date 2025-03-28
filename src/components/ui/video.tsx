@@ -45,7 +45,7 @@ export default function VideoPage({
             <Box position="relative" mx="15px">
                 <video
                     ref={videoRef}
-                    src="/videos/intro1.mp4"
+                    src="/videos/intro.mp4"
                     autoPlay
                     muted={muted} // Start muted for autoPlay
                     controls

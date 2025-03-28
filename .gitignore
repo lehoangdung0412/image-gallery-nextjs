@@ -40,3 +40,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .idea
+
+# public folder
+/public
+.env.development
+/terraform/.terraform.lock.hcl
+/terraform/.terraform/providers/registry.terraform.io/hashicorp/aws/5.92.0/darwin_arm64/LICENSE.txt
+/terraform/terraform.tfstate.backup
+/terraform/.terraform/providers/registry.terraform.io/hashicorp/aws/5.92.0/darwin_arm64/terraform-provider-aws_v5.92.0_x5
