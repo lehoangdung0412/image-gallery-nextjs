@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Box, CloseButton, IconButton, Image } from "@chakra-ui/react";
-import { red200 } from "@/constants/colors";
+import { Box, CloseButton, IconButton, Image, Skeleton } from "@chakra-ui/react";
+import { gray200, red200 } from "@/constants/colors";
 import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from "react-icons/ri";
 
 interface OverlayProps {
@@ -28,6 +28,7 @@ const Overlay = ({
 }: OverlayProps) => {
     const [zoomOrigin, setZoomOrigin] = useState("center center");
     const [highQualityMedia, setHighQualityMedia] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleZoomToggle = (event: React.MouseEvent<HTMLImageElement | HTMLVideoElement>) => {
         if (isZoomed) {
@@ -73,12 +74,13 @@ const Overlay = ({
     useEffect(() => {
         let highQualityMediaPath = "";
 
-        if (media.endsWith(".jpg") || media.endsWith(".png")) {
+        if (media.endsWith(".jpg") || media.endsWith(".JPG") || media.endsWith(".png")) {
             highQualityMediaPath = media.replace("/thumbnails/", "/high-quality/");
         } else if (media.endsWith(".mp4")) {
             highQualityMediaPath = media.replace("/thumbnails/", "/high-quality/");
         }
         setHighQualityMedia(highQualityMediaPath);
+        setIsLoading(true);
     }, [media]);
 
     return (
@@ -108,33 +110,41 @@ const Overlay = ({
                 m={isWideScreen ? "10%" : "3%"}
                 p={isWideScreen ? "0" : "5%"}
             >
-                {media.endsWith(".mp4") ? (
-                    <video
-                        src={highQualityMedia}
-                        controls
-                        autoPlay={true}
-                        onClick={handleZoomToggle}
-                        style={{
-                            maxWidth: "90%",
-                            maxHeight: "90%",
-                            borderRadius: "18px",
-                        }}
-                    />
-                ) : (
-                    <Image
-                        src={highQualityMedia}
-                        onClick={handleZoomToggle}
-                        maxWidth="90%"
-                        maxHeight="90%"
-                        borderRadius={18}
-                        style={{
-                            transform: isZoomed ? "scale(3)" : "scale(1)",
-                            transformOrigin: zoomOrigin,
-                            cursor: isZoomed ? "zoom-out" : "zoom-in",
-                            transition: "transform 0.3s ease-in-out",
-                        }}
-                    />
-                )}
+                {highQualityMedia ? (
+                    media.endsWith(".mp4") ? (
+                        <video
+                            src={highQualityMedia}
+                            controls
+                            autoPlay={true}
+                            loop
+                            onClick={handleZoomToggle}
+                            style={{
+                                maxWidth: "90%",
+                                maxHeight: "90%",
+                                borderRadius: "18px",
+                            }}
+                        />
+                    ) : (
+                        <>
+                            {isLoading && <Skeleton width="90%" height="90%" borderRadius={18} bg={gray200} />}
+                            <Image
+                                src={highQualityMedia}
+                                onClick={handleZoomToggle}
+                                maxWidth="90%"
+                                maxHeight="90%"
+                                borderRadius={18}
+                                style={{
+                                    transform: isZoomed ? "scale(3)" : "scale(1)",
+                                    transformOrigin: zoomOrigin,
+                                    cursor: isZoomed ? "zoom-out" : "zoom-in",
+                                    transition: "transform 0.3s ease-in-out",
+                                }}
+                                onLoad={() => setIsLoading(false)}
+                                display={isLoading ? "none" : "block"}
+                            />
+                        </>
+                    )
+                ) : null}
 
                 <CloseButton
                     position="absolute"

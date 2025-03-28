@@ -198,6 +198,7 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
                                         }}
                                         src={video}
                                         preload="auto"
+                                        muted={true}
                                         controls={isWideScreen ? undefined : true}
                                         loop
                                         style={{ width: "100%", borderRadius: "10px" }}
