@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Masonry from "react-masonry-css";
-import { Box, Text, Image, Center, Button, CloseButton, IconButton } from "@chakra-ui/react";
+import { Box, Text, Image, Center } from "@chakra-ui/react";
 import { imagesTab, videosTab } from "@/constants";
 import { useFetchImages } from "@/hooks/useFetchImages";
 import { useFetchVideos } from "@/hooks/useFetchVideos";

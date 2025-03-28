@@ -6,10 +6,10 @@ import { TimelineComponent } from "@/components/ui/timeline";
 
 export default function VideoPage({
     isWideScreen,
-    onMenuItemClick,
+    onMenuItemClickAction,
 }: {
     isWideScreen: boolean;
-    onMenuItemClick: (menu: string) => void;
+    onMenuItemClickAction: (menu: string) => void;
 }) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [muted, _setMuted] = useState(true); // Start with muted
@@ -75,7 +75,7 @@ export default function VideoPage({
                     </Button>
                 )}
             </Box>
-            {!isWideScreen && <TimelineComponent onMenuItemClick={onMenuItemClick} />}
+            {!isWideScreen && <TimelineComponent onMenuItemClickAction={onMenuItemClickAction} />}
         </Box>
     );
 }

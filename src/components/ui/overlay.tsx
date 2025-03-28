@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, CloseButton, IconButton, Image } from "@chakra-ui/react";
-import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { red200 } from "@/constants/colors";
+import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from "react-icons/ri";
 
 interface OverlayProps {
     media: string;
@@ -27,6 +27,7 @@ const Overlay = ({
     setIsZoomed,
 }: OverlayProps) => {
     const [zoomOrigin, setZoomOrigin] = useState("center center");
+    const [highQualityMedia, setHighQualityMedia] = useState(media);
 
     const handleZoomToggle = (event: React.MouseEvent<HTMLImageElement | HTMLVideoElement>) => {
         if (isZoomed) {
@@ -69,6 +70,17 @@ const Overlay = ({
         };
     }, [onClose, onPrev, onNext, canPrev, canNext]);
 
+    useEffect(() => {
+        let highQualityMediaPath = "";
+
+        if (media.endsWith(".jpg") || media.endsWith(".png")) {
+            highQualityMediaPath = media.replace("/thumbnails/", "/high-quality/");
+        } else if (media.endsWith(".mp4")) {
+            highQualityMediaPath = media.replace("/thumbnails/", "/high-quality/");
+        }
+        setHighQualityMedia(highQualityMediaPath);
+    }, [media]);
+
     return (
         <Box
             position="fixed"
@@ -96,9 +108,9 @@ const Overlay = ({
                 m={isWideScreen ? "10%" : "3%"}
                 p={isWideScreen ? "0" : "5%"}
             >
-                {media.endsWith(".mp4") || media.endsWith(".webm") ? (
+                {media.endsWith(".mp4") ? (
                     <video
-                        src={media}
+                        src={highQualityMedia}
                         controls
                         autoPlay={true}
                         onClick={handleZoomToggle}
@@ -110,7 +122,7 @@ const Overlay = ({
                     />
                 ) : (
                     <Image
-                        src={media}
+                        src={highQualityMedia}
                         onClick={handleZoomToggle}
                         maxWidth="90%"
                         maxHeight="90%"
@@ -145,12 +157,12 @@ const Overlay = ({
                         transform="translateY(-50%)"
                         colorScheme="whiteAlpha"
                         onClick={onPrev}
-                        bg="white"
+                        bg="transparent"
                         _hover={{
                             background: red200,
                         }}
                     >
-                        <ArrowLeftIcon color="black" />
+                        <RiArrowLeftDoubleFill color="black" size={20} />
                     </IconButton>
                 )}
 
@@ -163,12 +175,12 @@ const Overlay = ({
                         transform="translateY(-50%)"
                         colorScheme="whiteAlpha"
                         onClick={onNext}
-                        bg="white"
+                        bg="transparent"
                         _hover={{
                             background: red200,
                         }}
                     >
-                        <ArrowRightIcon color="black" />
+                        <RiArrowRightDoubleFill color="black" />
                     </IconButton>
                 )}
             </Box>
