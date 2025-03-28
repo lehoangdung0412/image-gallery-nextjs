@@ -27,7 +27,7 @@ const Overlay = ({
     setIsZoomed,
 }: OverlayProps) => {
     const [zoomOrigin, setZoomOrigin] = useState("center center");
-    const [highQualityMedia, setHighQualityMedia] = useState(media);
+    const [highQualityMedia, setHighQualityMedia] = useState("");
 
     const handleZoomToggle = (event: React.MouseEvent<HTMLImageElement | HTMLVideoElement>) => {
         if (isZoomed) {
