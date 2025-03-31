@@ -44,46 +44,46 @@ const TimelineEvent = ({
     </Timeline.Item>
 );
 
-export const TimelineComponent = ({ onMenuItemClick }: { onMenuItemClick: (menu: string) => void }) => {
+export const TimelineComponent = ({ onMenuItemClickAction }: { onMenuItemClickAction: (menu: string) => void }) => {
     return (
         <Timeline.Root px="15px" mt="20px" color="black" alignItems="center">
             <TimelineEvent
-                onMenuItemClick={onMenuItemClick}
+                onMenuItemClick={onMenuItemClickAction}
                 eventName="Wedding at Maison De Charme"
                 eventDate="10th Jan 2024"
                 icon={<LuShip color={green900} />}
                 menuItem={maison}
             />
             <TimelineEvent
-                onMenuItemClick={onMenuItemClick}
+                onMenuItemClick={onMenuItemClickAction}
                 eventName="Wedding ceremony at the groom's house"
                 eventDate="7th Jan 2024"
                 icon={<LuCheck color={green900} />}
                 menuItem={groom}
             />
             <TimelineEvent
-                onMenuItemClick={onMenuItemClick}
+                onMenuItemClick={onMenuItemClickAction}
                 eventName="Wedding ceremony at the bride's house"
                 eventDate="7th Jan 2024"
                 icon={<LuPackage color={green900} />}
                 menuItem={bride}
             />
             <TimelineEvent
-                onMenuItemClick={onMenuItemClick}
+                onMenuItemClick={onMenuItemClickAction}
                 eventName="Bride's departure ceremony"
                 eventDate="6th Jan 2024"
                 icon={<LuPackage color={green900} />}
                 menuItem={departure}
             />
             <TimelineEvent
-                onMenuItemClick={onMenuItemClick}
+                onMenuItemClick={onMenuItemClickAction}
                 eventName="Engagement ceremony wedding"
                 eventDate="23rd Jul 2023"
                 icon={<LuPackage color={green900} />}
                 menuItem={engagement}
             />
             <TimelineEvent
-                onMenuItemClick={onMenuItemClick}
+                onMenuItemClick={onMenuItemClickAction}
                 eventName="Pre-wedding"
                 eventDate="22nd Apr 2023"
                 icon={<LuPackage color={green900} />}

@@ -49,7 +49,7 @@ export default function HomePage() {
     });
 
     const width = useWindowSize();
-    const { isVisible, lastScrollY } = useScrollPosition(80);
+    const { isVisible } = useScrollPosition(80);
 
     const handleMenuItemClick = (item: string) => {
         const baseCategory = item.includes("-wedding") ? "wedding" : item.includes("-traveling") ? "traveling" : item;
@@ -79,7 +79,7 @@ export default function HomePage() {
     const renderContent = useCallback(() => {
         const props = {
             isWideScreen: pageState.isWideScreen,
-            onMenuItemClick: handleMenuItemClick,
+            onMenuItemClickAction: handleMenuItemClick,
         };
         if (pageState.currentPage === home) {
             return <VideoPage {...props} />;
@@ -128,7 +128,6 @@ export default function HomePage() {
     }, []);
 
     useEffect(() => {
-        // Reset scroll position trước khi render nội dung mới
         window.scrollTo(0, 0);
     }, [pageState.currentPage]);
 
