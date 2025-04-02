@@ -72,13 +72,7 @@ const Overlay = ({
     }, [onClose, onPrev, onNext, canPrev, canNext]);
 
     useEffect(() => {
-        let highQualityMediaPath = "";
-
-        if (media.endsWith(".jpg") || media.endsWith(".JPG") || media.endsWith(".png")) {
-            highQualityMediaPath = media.replace("/thumbnails/", "/high-quality/");
-        } else if (media.endsWith(".mp4")) {
-            highQualityMediaPath = media.replace("/thumbnails/", "/high-quality/");
-        }
+        const highQualityMediaPath = media.replace("/thumbnails/", "/high-quality/");
         setHighQualityMedia(highQualityMediaPath);
         setIsLoading(true);
     }, [media]);
