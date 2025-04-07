@@ -45,6 +45,7 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
     const [isHovering, setIsHovering] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [isZoomed, setIsZoomed] = useState(false);
+    const [posterUrls, setPosterUrls] = useState<{ [key: number]: string }>({});
     const mediaList = currentTab === imagesTab ? images : videos;
 
     const handleOpen = (index: number) => setSelectedIndex(index);
@@ -59,6 +60,25 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
     const handleNext = () => {
         setIsZoomed(false);
         setSelectedIndex((prev) => (prev !== null && prev < mediaList.length - 1 ? prev + 1 : prev));
+    };
+
+    const handleVideoHover = (index: number) => {
+        setHoveredIndex(index);
+        setIsHovering(true);
+        // Only pause the previously playing video if it is different from the hovered one
+        if (playingIndex !== null && playingIndex !== index) {
+            videoRefs.current[playingIndex]?.pause();
+        }
+        videoRefs.current[index]?.play().catch(() => {});
+    };
+
+    const handleVideoMouseLeave = () => {
+        setHoveredIndex(null);
+        setIsHovering(false);
+        // Pause the video when mouse leaves
+        if (playingIndex !== null) {
+            videoRefs.current[playingIndex]?.pause();
+        }
     };
 
     const canGoPrev = selectedIndex !== null && selectedIndex > 0;
@@ -96,11 +116,15 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
     }, [category, currentTab]);
 
     useEffect(() => {
-        if (currentTab === imagesTab) {
-            fetchImages(page);
-        } else if (currentTab === videosTab) {
-            fetchVideos(page);
-        }
+        const delayFetch = setTimeout(async () => {
+            if (currentTab === imagesTab) {
+                await fetchImages(page);
+            } else if (currentTab === videosTab) {
+                await fetchVideos(page);
+            }
+        }, 200);
+
+        return () => clearTimeout(delayFetch);
     }, [page, currentTab, fetchImages, fetchVideos]);
 
     useEffect(() => {
@@ -108,6 +132,49 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
             setPlayingIndex(0);
         }
     }, [videos.length, playingIndex]);
+
+    useEffect(() => {
+        const generatePosters = async () => {
+            const posters: { [key: number]: string } = {};
+            await Promise.all(
+                videos.map(async (video, index) => {
+                    const videoElement = document.createElement("video");
+                    videoElement.src = video;
+                    videoElement.crossOrigin = "anonymous";
+                    videoElement.preload = "auto";
+
+                    await new Promise((resolve) => {
+                        videoElement.addEventListener("loadeddata", () => {
+                            videoElement.currentTime = 1;
+                        });
+
+                        videoElement.addEventListener("seeked", () => {
+                            const canvas = document.createElement("canvas");
+                            const ctx = canvas.getContext("2d");
+
+                            canvas.width = videoElement.videoWidth;
+                            canvas.height = videoElement.videoHeight;
+
+                            ctx?.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                            posters[index] = canvas.toDataURL("image/jpeg");
+                            resolve(null);
+                        });
+                    });
+                }),
+            );
+            setPosterUrls(posters);
+        };
+
+        if (currentTab === videosTab) {
+            generatePosters()
+                .then(() => {
+                    console.log("Posters generated successfully");
+                })
+                .catch((error) => {
+                    console.error("Error in generating posters:", error);
+                });
+        }
+    }, [videos, currentTab]);
 
     return (
         <Box w="100%" h="100%">
@@ -175,30 +242,17 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
                                             setSelectedIndex(index);
                                         }
                                     }}
-                                    onMouseEnter={() => {
-                                        setHoveredIndex(index);
-                                        setIsHovering(true);
-                                        if (playingIndex !== null && playingIndex !== index) {
-                                            videoRefs.current[playingIndex]?.pause();
-                                        }
-                                        videoRefs.current[index]?.play().catch(() => {});
-                                    }}
-                                    onMouseLeave={() => {
-                                        setHoveredIndex(null);
-                                        setIsHovering(false);
-                                        if (playingIndex !== null && playingIndex !== index) {
-                                            videoRefs.current[playingIndex]?.play().catch(() => {});
-                                        }
-                                        videoRefs.current[index]?.pause();
-                                    }}
+                                    onMouseEnter={() => handleVideoHover(index)}
+                                    onMouseLeave={() => handleVideoMouseLeave()}
                                 >
                                     <video
                                         ref={(el) => {
                                             videoRefs.current[index] = el;
                                         }}
                                         src={video}
+                                        poster={posterUrls[index] || ""}
                                         preload="auto"
-                                        muted={true}
+                                        muted
                                         controls={isWideScreen ? undefined : true}
                                         loop
                                         style={{ width: "100%", borderRadius: "10px" }}

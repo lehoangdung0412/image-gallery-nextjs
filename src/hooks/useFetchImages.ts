@@ -22,7 +22,7 @@ export const useFetchImages = (
 
                 const data = await response.json();
                 const allImages = data[category] || [];
-                const imagesPerPage = 20;
+                const imagesPerPage = 12;
                 const paginatedImages = allImages.slice((pageNum - 1) * imagesPerPage, pageNum * imagesPerPage);
 
                 setImages((prev) => [...prev, ...paginatedImages]);
