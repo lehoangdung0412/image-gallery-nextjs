@@ -129,6 +129,7 @@ export default function HomePage() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        handleCurrentTab(imagesTab);
     }, [pageState.currentPage]);
 
     if (pageState.showSplash) {
