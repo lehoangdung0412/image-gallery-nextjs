@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, CloseButton, IconButton, Image, Skeleton } from "@chakra-ui/react";
 import { gray200, red200 } from "@/constants/colors";
 import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from "react-icons/ri";
 
 interface OverlayProps {
     media: string;
-    onClose: () => void;
-    onPrev: () => void;
-    onNext: () => void;
+    onClose: (time: number) => void;
+    onPrev: (time: number) => void;
+    onNext: (time: number) => void;
     canPrev: boolean;
     canNext: boolean;
     isWideScreen: boolean;
     isZoomed: boolean;
     setIsZoomed: (isZoomed: boolean) => void;
+    playbackTime?: number;
 }
 
 const Overlay = ({
@@ -25,10 +26,12 @@ const Overlay = ({
     isWideScreen,
     isZoomed,
     setIsZoomed,
+    playbackTime,
 }: OverlayProps) => {
     const [zoomOrigin, setZoomOrigin] = useState("center center");
     const [highQualityMedia, setHighQualityMedia] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
 
     const handleZoomToggle = (event: React.MouseEvent<HTMLImageElement | HTMLVideoElement>) => {
         if (isZoomed) {
@@ -47,20 +50,31 @@ const Overlay = ({
 
     const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.target === event.currentTarget) {
-            onClose();
+            onClose(getCurrentTime());
         }
+    };
+
+    const getCurrentTime = () => videoRef.current?.currentTime || 0;
+    const handleCloseClick = () => {
+        onClose(getCurrentTime());
+    };
+    const handleNextClick = () => {
+        onNext(getCurrentTime());
+    };
+    const handlePrevClick = () => {
+        onPrev(getCurrentTime());
     };
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
-                onClose();
+                onClose(getCurrentTime());
             }
             if (event.key === "ArrowLeft" && canPrev) {
-                onPrev();
+                onPrev(getCurrentTime());
             }
             if (event.key === "ArrowRight" && canNext) {
-                onNext();
+                onNext(getCurrentTime());
             }
         };
 
@@ -77,6 +91,15 @@ const Overlay = ({
         setIsLoading(true);
     }, [media]);
 
+    useEffect(() => {
+        if (media.endsWith(".mp4")) {
+            const videoElement = videoRef.current;
+            if (videoElement && playbackTime !== undefined) {
+                videoElement.currentTime = playbackTime;
+            }
+        }
+    }, [media, playbackTime]);
+
     return (
         <Box
             position="fixed"
@@ -85,6 +108,7 @@ const Overlay = ({
             w="100vw"
             h="100vh"
             bg="rgba(0, 0, 0, 0.8)"
+            backdropFilter="blur(5px)"
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -107,9 +131,21 @@ const Overlay = ({
                 {highQualityMedia ? (
                     media.endsWith(".mp4") ? (
                         <video
+                            ref={videoRef}
                             src={highQualityMedia}
                             controls
                             autoPlay={true}
+                            onLoadedMetadata={(e) => {
+                                const video = e.currentTarget;
+                                if (video.readyState >= 1) {
+                                    video.currentTime = playbackTime ?? 0;
+                                    const playAfterSeek = () => {
+                                        video.play().catch(() => {});
+                                        video.removeEventListener("seeked", playAfterSeek);
+                                    };
+                                    video.addEventListener("seeked", playAfterSeek);
+                                }
+                            }}
                             loop
                             onClick={handleZoomToggle}
                             style={{
@@ -146,7 +182,7 @@ const Overlay = ({
                     right={isWideScreen ? 2 : 0}
                     size="lg"
                     color="black"
-                    onClick={onClose}
+                    onClick={handleCloseClick}
                     _hover={{
                         background: red200,
                     }}
@@ -160,7 +196,7 @@ const Overlay = ({
                         top="50%"
                         transform="translateY(-50%)"
                         colorScheme="whiteAlpha"
-                        onClick={onPrev}
+                        onClick={handlePrevClick}
                         bg="transparent"
                         _hover={{
                             background: red200,
@@ -178,7 +214,7 @@ const Overlay = ({
                         top="50%"
                         transform="translateY(-50%)"
                         colorScheme="whiteAlpha"
-                        onClick={onNext}
+                        onClick={handleNextClick}
                         bg="transparent"
                         _hover={{
                             background: red200,
