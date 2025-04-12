@@ -46,18 +46,40 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [isZoomed, setIsZoomed] = useState(false);
     const [posterUrls, setPosterUrls] = useState<{ [key: number]: string }>({});
+    const [videoPlayTimes, setVideoPlayTimes] = useState<{ [key: number]: number }>({});
+    const [lastPlayedIndex, setLastPlayedIndex] = useState<number | null>(null);
     const mediaList = currentTab === imagesTab ? images : videos;
 
-    const handleOpen = (index: number) => setSelectedIndex(index);
-    const handleClose = () => {
+    const savePlaybackTime = (index: number | null, time?: number) => {
+        if (index !== null && time !== undefined) {
+            setVideoPlayTimes((prev) => ({ ...prev, [index]: time }));
+        }
+    };
+
+    const handleOpen = (index: number) => {
+        setSelectedIndex(index);
+    };
+    const handleClose = (time?: number) => {
+        if (selectedIndex !== null) {
+            savePlaybackTime(selectedIndex, time);
+            setLastPlayedIndex(selectedIndex);
+        }
         setIsZoomed(false);
         setSelectedIndex(null);
     };
-    const handlePrev = () => {
+    const handlePrev = (time?: number) => {
+        if (selectedIndex !== null) {
+            savePlaybackTime(selectedIndex, time);
+            setLastPlayedIndex(selectedIndex);
+        }
         setIsZoomed(false);
-        setSelectedIndex((prev) => (prev && prev > 0 ? prev - 1 : prev));
+        setSelectedIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
     };
-    const handleNext = () => {
+    const handleNext = (time?: number) => {
+        if (selectedIndex !== null) {
+            savePlaybackTime(selectedIndex, time);
+            setLastPlayedIndex(selectedIndex);
+        }
         setIsZoomed(false);
         setSelectedIndex((prev) => (prev !== null && prev < mediaList.length - 1 ? prev + 1 : prev));
     };
@@ -176,6 +198,19 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
         }
     }, [videos, currentTab]);
 
+    useEffect(() => {
+        if (selectedIndex === null && currentTab === videosTab && lastPlayedIndex !== null) {
+            const index = lastPlayedIndex;
+            const videoEl = videoRefs.current[index];
+            const time = videoPlayTimes[index];
+
+            if (videoEl && time !== undefined) {
+                videoEl.currentTime = time;
+                videoEl.play().catch(() => {});
+            }
+        }
+    }, [selectedIndex, currentTab, videoPlayTimes, lastPlayedIndex]);
+
     return (
         <Box w="100%" h="100%">
             {selectedIndex !== null && (
@@ -189,6 +224,7 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
                     isWideScreen={isWideScreen}
                     setIsZoomed={setIsZoomed}
                     isZoomed={isZoomed}
+                    playbackTime={videoPlayTimes[selectedIndex] || 0}
                 />
             )}
             <InfiniteScroll
@@ -238,7 +274,13 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
                                         if (isWideScreen) {
                                             setHoveredIndex(null);
                                             setIsHovering(false);
-                                            videoRefs.current[index]?.pause();
+                                            const video = videoRefs.current[index];
+                                            if (video) {
+                                                const currentTime = video.currentTime;
+                                                setVideoPlayTimes((prev) => ({ ...prev, [index]: currentTime }));
+                                                setLastPlayedIndex(index);
+                                                video.pause();
+                                            }
                                             setSelectedIndex(index);
                                         }
                                     }}
