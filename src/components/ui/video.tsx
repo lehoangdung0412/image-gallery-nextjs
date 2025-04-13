@@ -53,6 +53,8 @@ export default function VideoPage({
                         borderRadius: "15px",
                         display: "block",
                     }}
+                    controlsList="nodownload"
+                    disablePictureInPicture
                 />
                 {buttonVisible && (
                     <Button

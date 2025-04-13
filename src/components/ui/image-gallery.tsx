@@ -211,6 +211,12 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
         }
     }, [selectedIndex, currentTab, videoPlayTimes, lastPlayedIndex]);
 
+    useEffect(() => {
+        const disableContextMenu = (e: MouseEvent) => e.preventDefault();
+        document.addEventListener("contextmenu", disableContextMenu);
+        return () => document.removeEventListener("contextmenu", disableContextMenu);
+    }, []);
+
     return (
         <Box w="100%" h="100%">
             {selectedIndex !== null && (
@@ -253,6 +259,7 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
                                   overflow="hidden"
                                   mb="15px"
                                   onClick={() => handleOpen(index)}
+                                  userSelect="none"
                               >
                                   <Image
                                       src={image}
@@ -260,6 +267,8 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
                                       width="100%"
                                       height="auto"
                                       borderRadius={10}
+                                      draggable={false}
+                                      pointerEvents="none"
                                   />
                               </Box>
                           ))
@@ -298,6 +307,8 @@ export const ImageGallery = ({ category, currentTab, isWideScreen }: ImageGaller
                                         controls={isWideScreen ? undefined : true}
                                         loop
                                         style={{ width: "100%", borderRadius: "10px" }}
+                                        controlsList="nodownload"
+                                        disablePictureInPicture
                                     />
                                 </Box>
                             ))

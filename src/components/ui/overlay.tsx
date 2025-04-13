@@ -127,6 +127,7 @@ const Overlay = ({
                 overflow="hidden"
                 m={isWideScreen ? "10%" : "3%"}
                 p={isWideScreen ? "0" : "5%"}
+                userSelect="none"
             >
                 {highQualityMedia ? (
                     media.endsWith(".mp4") ? (
@@ -153,10 +154,20 @@ const Overlay = ({
                                 maxHeight: "90%",
                                 borderRadius: "18px",
                             }}
+                            controlsList="nodownload"
+                            disablePictureInPicture
+                            draggable={false}
                         />
                     ) : (
                         <>
-                            {isLoading && <Skeleton width="90%" height="90%" borderRadius={18} bg={gray200} />}
+                            {isLoading && (
+                                <Skeleton
+                                    width="90%"
+                                    height={isWideScreen ? "90%" : "200px"}
+                                    borderRadius={18}
+                                    bg={gray200}
+                                />
+                            )}
                             <Image
                                 src={highQualityMedia}
                                 onClick={handleZoomToggle}
@@ -171,6 +182,7 @@ const Overlay = ({
                                 }}
                                 onLoad={() => setIsLoading(false)}
                                 display={isLoading ? "none" : "block"}
+                                draggable={false}
                             />
                         </>
                     )
