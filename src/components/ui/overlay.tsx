@@ -100,12 +100,6 @@ const Overlay = ({
         }
     }, [media, playbackTime]);
 
-    useEffect(() => {
-        const disableContextMenu = (e: MouseEvent) => e.preventDefault();
-        document.addEventListener("contextmenu", disableContextMenu);
-        return () => document.removeEventListener("contextmenu", disableContextMenu);
-    }, []);
-
     return (
         <Box
             position="fixed"
@@ -182,7 +176,6 @@ const Overlay = ({
                                 onLoad={() => setIsLoading(false)}
                                 display={isLoading ? "none" : "block"}
                                 draggable={false}
-                                pointerEvents="none"
                             />
                         </>
                     )
