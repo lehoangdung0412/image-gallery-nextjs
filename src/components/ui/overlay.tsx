@@ -160,7 +160,14 @@ const Overlay = ({
                         />
                     ) : (
                         <>
-                            {isLoading && <Skeleton width="90%" height="90%" borderRadius={18} bg={gray200} />}
+                            {isLoading && (
+                                <Skeleton
+                                    width="90%"
+                                    height={isWideScreen ? "90%" : "200px"}
+                                    borderRadius={18}
+                                    bg={gray200}
+                                />
+                            )}
                             <Image
                                 src={highQualityMedia}
                                 onClick={handleZoomToggle}
