@@ -100,6 +100,12 @@ const Overlay = ({
         }
     }, [media, playbackTime]);
 
+    useEffect(() => {
+        const disableContextMenu = (e: MouseEvent) => e.preventDefault();
+        document.addEventListener("contextmenu", disableContextMenu);
+        return () => document.removeEventListener("contextmenu", disableContextMenu);
+    }, []);
+
     return (
         <Box
             position="fixed"
@@ -127,6 +133,7 @@ const Overlay = ({
                 overflow="hidden"
                 m={isWideScreen ? "10%" : "3%"}
                 p={isWideScreen ? "0" : "5%"}
+                userSelect="none"
             >
                 {highQualityMedia ? (
                     media.endsWith(".mp4") ? (
@@ -153,6 +160,9 @@ const Overlay = ({
                                 maxHeight: "90%",
                                 borderRadius: "18px",
                             }}
+                            controlsList="nodownload"
+                            disablePictureInPicture
+                            draggable={false}
                         />
                     ) : (
                         <>
@@ -171,6 +181,8 @@ const Overlay = ({
                                 }}
                                 onLoad={() => setIsLoading(false)}
                                 display={isLoading ? "none" : "block"}
+                                draggable={false}
+                                pointerEvents="none"
                             />
                         </>
                     )
